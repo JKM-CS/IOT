@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arduino IoT Control Test</title>
+    <title>Firestore IoT Control Test</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
+            background-color: #121212;
+            color: #e0e0e0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -17,13 +17,13 @@
             margin: 0;
         }
         .container {
-            background: white;
+            background: #1e1e1e;
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
             text-align: center;
         }
-        h1 { margin-bottom: 30px; font-size: 24px; }
+        h1 { margin-bottom: 30px; font-size: 24px; color: #fff; }
         .btn-group { margin: 20px 0; }
         button {
             border: none;
@@ -34,66 +34,78 @@
             border-radius: 8px;
             cursor: pointer;
             margin: 0 10px;
-            transition: background-color 0.2s ease, transform 0.1s;
+            transition: opacity 0.2s, transform 0.1s;
         }
         button:active { transform: scale(0.98); }
-        .btn-on { background-color: #28a745; color: white; }
-        .btn-on:hover { background-color: #218838; }
-        .btn-off { background-color: #dc3545; color: white; }
-        .btn-off:hover { background-color: #bd2130; }
+        .btn-on { background-color: #00b0ff; color: #fff; }
+        .btn-off { background-color: #37474f; color: #b0bec5; }
+        button:hover { opacity: 0.9; }
         .sensor-box {
             margin-top: 30px;
             padding: 15px;
-            background-color: #e9ecef;
+            background-color: #2d2d2d;
             border-radius: 6px;
             font-size: 18px;
+            color: #00e676;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Remote IoT Controller</h1>
+        <h1>Firestore IoT Controller</h1>
         
         <div class="btn-group">
-            <button class="btn-on" onclick="sendLedCommand(1)">Turn ON Built-in LED</button>
-            <button class="btn-off" onclick="sendLedCommand(0)">Turn OFF Built-in LED</button>
+            <button class="btn-on" onclick="setLed(true)">Turn ON</button>
+            <button class="btn-off" onclick="setLed(false)">Turn OFF</button>
         </div>
 
         <div class="sensor-box">
-            Analog Sensor Pin A0: <span id="sensorValueDisplay">Reading...</span>
+            Analog A0: <span id="sensorDisplay">Reading...</span>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        // --- REPLACE WITH YOUR FIREBASE DATABASE URL ---
+        // Your direct project configuration
         const firebaseConfig = {
-            databaseURL: "https://your-project-id-default-rtdb.firebaseio.com"
+            apiKey: "AIzaSyCxNYefYl-KLmv7Td-AO-btHAk6LvOdw94",
+            authDomain: "iot-jkm.firebaseapp.com",
+            projectId: "iot-jkm",
+            storageBucket: "iot-jkm.firebasestorage.app",
+            messagingSenderId: "10237883579",
+            appId: "1:10237883579:web:6954b9b91cc71b3fd3659e",
+            measurementId: "G-WXZ2WZ4T7M"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
+        const db = getFirestore(app);
+        
+        // Document location inside Cloud Firestore
+        const docRef = doc(db, "automation", "device1");
 
-        // Expose function globally so inline HTML onclick can find it
-        window.sendLedCommand = function(state) {
-            set(ref(database, 'controls/ledStatus'), state)
-                .then(() => {
-                    console.log("LED state updated to: " + state);
-                })
-                .catch((error) => {
-                    console.error("Error writing data: ", error);
-                });
+        // Update target switch document field value
+        window.setLed = async function(state) {
+            try {
+                await setDoc(docRef, { ledStatus: state }, { merge: true });
+                console.log("Command sent: " + state);
+            } catch (e) {
+                console.error("Write error: ", e);
+            }
         }
 
-        // Real-time listener for incoming telemetry / sensor data
-        const sensorRef = ref(database, 'sensors/data');
-        onValue(sensorRef, (snapshot) => {
-            const data = snapshot.val();
-            document.getElementById("sensorValueDisplay").innerText = (data !== null) ? data : "Waiting for data...";
+        // Live telemetry snapshot stream listener
+        onSnapshot(docRef, (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                if (data.sensorValue !== undefined) {
+                    document.getElementById("sensorDisplay").innerText = data.sensorValue;
+                }
+            } else {
+                document.getElementById("sensorDisplay").innerText = "No data payload on Firestore yet";
+            }
         });
     </script>
 </body>

@@ -5,71 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firestore IoT Control Test</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: #1e1e1e;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            text-align: center;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .container { background: #1e1e1e; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); text-align: center; }
         h1 { margin-bottom: 30px; font-size: 24px; color: #fff; }
         .btn-group { margin: 20px 0; }
-        button {
-            border: none;
-            outline: none;
-            padding: 15px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 0 10px;
-            transition: opacity 0.2s, transform 0.1s;
-        }
-        button:active { transform: scale(0.98); }
+        button { border: none; padding: 15px 30px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; margin: 0 10px; }
         .btn-on { background-color: #00b0ff; color: #fff; }
         .btn-off { background-color: #37474f; color: #b0bec5; }
-        button:hover { opacity: 0.9; }
-        .sensor-box {
-            margin-top: 30px;
-            padding: 15px;
-            background-color: #2d2d2d;
-            border-radius: 6px;
-            font-size: 18px;
-            color: #00e676;
-        }
+        .sensor-box { margin-top: 30px; padding: 15px; background-color: #2d2d2d; border-radius: 6px; font-size: 18px; color: #00e676; }
     </style>
 </head>
 <body>
-
     <div class="container">
         <h1>Firestore IoT Controller</h1>
-        
         <div class="btn-group">
             <button class="btn-on" onclick="setLed(true)">Turn ON LED</button>
             <button class="btn-off" onclick="setLed(false)">Turn OFF LED</button>
         </div>
-
-        <div class="sensor-box">
-            Analog A0: <span id="sensorDisplay">Reading...</span>
-        </div>
+        <div class="sensor-box">Analog A0: <span id="sensorDisplay">Reading...</span></div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        // Your direct project configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCxNYefYl-KLmv7Td-AO-btHAk6LvOdw94",
             authDomain: "iot-jkm.firebaseapp.com",
@@ -83,28 +42,24 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
-        // Document location inside Cloud Firestore
-        const docRef = doc(db, "automation", "device1");
+        // SPLIT PATHS: One for sending commands, one for reading sensors
+        const controlRef = doc(db, "automation", "control");
+        const telemetryRef = doc(db, "automation", "telemetry");
 
-        // Update target switch document field value
+        // Write to the CONTROL document
         window.setLed = async function(state) {
             try {
-                await setDoc(docRef, { ledStatus: state }, { merge: true });
+                await setDoc(controlRef, { ledStatus: state }, { merge: true });
                 console.log("Command sent: " + state);
             } catch (e) {
                 console.error("Write error: ", e);
             }
         }
 
-        // Live telemetry snapshot stream listener
-        onSnapshot(docRef, (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                if (data.sensorValue !== undefined) {
-                    document.getElementById("sensorDisplay").innerText = data.sensorValue;
-                }
-            } else {
-                document.getElementById("sensorDisplay").innerText = "No data payload on Firestore yet";
+        // Read from the TELEMETRY document
+        onSnapshot(telemetryRef, (docSnap) => {
+            if (docSnap.exists() && docSnap.data().sensorValue !== undefined) {
+                document.getElementById("sensorDisplay").innerText = docSnap.data().sensorValue;
             }
         });
     </script>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduino IoT Control Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 { margin-bottom: 30px; font-size: 24px; }
+        .btn-group { margin: 20px 0; }
+        button {
+            border: none;
+            outline: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background-color 0.2s ease, transform 0.1s;
+        }
+        button:active { transform: scale(0.98); }
+        .btn-on { background-color: #28a745; color: white; }
+        .btn-on:hover { background-color: #218838; }
+        .btn-off { background-color: #dc3545; color: white; }
+        .btn-off:hover { background-color: #bd2130; }
+        .sensor-box {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Remote IoT Controller</h1>
+        
+        <div class="btn-group">
+            <button class="btn-on" onclick="sendLedCommand(1)">Turn ON Built-in LED</button>
+            <button class="btn-off" onclick="sendLedCommand(0)">Turn OFF Built-in LED</button>
+        </div>
+
+        <div class="sensor-box">
+            Analog Sensor Pin A0: <span id="sensorValueDisplay">Reading...</span>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        // --- REPLACE WITH YOUR FIREBASE DATABASE URL ---
+        const firebaseConfig = {
+            databaseURL: "https://your-project-id-default-rtdb.firebaseio.com"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Expose function globally so inline HTML onclick can find it
+        window.sendLedCommand = function(state) {
+            set(ref(database, 'controls/ledStatus'), state)
+                .then(() => {
+                    console.log("LED state updated to: " + state);
+                })
+                .catch((error) => {
+                    console.error("Error writing data: ", error);
+                });
+        }
+
+        // Real-time listener for incoming telemetry / sensor data
+        const sensorRef = ref(database, 'sensors/data');
+        onValue(sensorRef, (snapshot) => {
+            const data = snapshot.val();
+            document.getElementById("sensorValueDisplay").innerText = (data !== null) ? data : "Waiting for data...";
+        });
+    </script>
+</body>
+</html>

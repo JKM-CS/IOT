@@ -3,132 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IoT Remote Control</title>
+    <title>Instant IoT Controller</title>
     <style>
-        /* Modern Dark Theme Variables */
-        :root {
-            --bg-color: #0f172a;
-            --panel-color: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-on: #10b981;
-            --accent-off: #ef4444;
-        }
-
-        body {
-            margin: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .card {
-            background-color: var(--panel-color);
-            width: 100%;
-            max-width: 400px; /* Limits width on desktop, expands on mobile */
-            border-radius: 20px;
-            padding: 40px 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-
-        h1 {
-            margin: 0 0 8px 0;
-            font-size: 1.75rem;
-            font-weight: 700;
-            letter-spacing: -0.025em;
-        }
-
-        p.subtitle {
-            color: var(--text-muted);
-            margin: 0 0 32px 0;
-            font-size: 0.95rem;
-        }
-
-        /* Flexbox makes buttons stack on tiny screens and sit side-by-side on larger ones */
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        @media (min-width: 360px) {
-            .btn-group { flex-direction: row; }
-        }
-
-        button {
-            flex: 1;
-            padding: 16px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            color: white;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            touch-action: manipulation; /* Prevents double-tap zoom on phones */
-        }
-
-        button:active:not(:disabled) {
-            transform: scale(0.96);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-on {
-            background-color: var(--accent-on);
-            box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
-        }
-
-        .btn-on:hover:not(:disabled) { background-color: #059669; }
-
-        .btn-off {
-            background-color: var(--accent-off);
-            box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.39);
-        }
-
-        .btn-off:hover:not(:disabled) { background-color: #dc2626; }
-
-        /* Dynamic Status Text */
-        .status {
-            margin-top: 24px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            min-height: 20px;
-            transition: color 0.3s ease;
-        }
-
-        .status.success { color: var(--accent-on); }
-        .status.error { color: var(--accent-off); }
+        :root { --bg-color: #0f172a; --panel-color: #1e293b; --text-main: #f8fafc; --accent-on: #10b981; --accent-off: #ef4444; }
+        body { margin: 0; font-family: system-ui, sans-serif; background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        .card { background-color: var(--panel-color); width: 100%; max-width: 400px; border-radius: 20px; padding: 40px 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); text-align: center; }
+        h1 { margin: 0 0 32px 0; font-size: 1.75rem; }
+        .btn-group { display: flex; gap: 16px; }
+        button { flex: 1; padding: 16px; font-size: 1.1rem; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; color: white; transition: 0.2s; }
+        button:active { transform: scale(0.96); }
+        .btn-on { background-color: var(--accent-on); }
+        .btn-off { background-color: var(--accent-off); }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h1>Uno R4 Controller</h1>
-        <p class="subtitle">Remote Cloud Interface</p>
-        
+        <h1>Instant Control</h1>
         <div class="btn-group">
-            <button class="btn-on" id="btnOn" onclick="setLed(true)">Turn ON</button>
-            <button class="btn-off" id="btnOff" onclick="setLed(false)">Turn OFF</button>
+            <button class="btn-on" onclick="setLed(true)">Turn ON</button>
+            <button class="btn-off" onclick="setLed(false)">Turn OFF</button>
         </div>
-
-        <div id="statusText" class="status">System Ready</div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCxNYefYl-KLmv7Td-AO-btHAk6LvOdw94",
@@ -136,50 +36,22 @@
             projectId: "iot-jkm",
             storageBucket: "iot-jkm.firebasestorage.app",
             messagingSenderId: "10237883579",
-            appId: "1:10237883579:web:6954b9b91cc71b3fd3659e",
-            measurementId: "G-WXZ2WZ4T7M"
+            appId: "1:10237883579:web:6954b9b91cc71b3fd3659e"
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const controlRef = doc(db, "automation", "control");
+        const db = getDatabase(app);
+        
+        // Target a single, simple node in the database
+        const ledRef = ref(db, 'ledStatus');
 
-        // Advanced UI Logic
         window.setLed = async function(state) {
-            const statusText = document.getElementById("statusText");
-            const btnOn = document.getElementById("btnOn");
-            const btnOff = document.getElementById("btnOff");
-
-            // 1. Lock the UI immediately
-            btnOn.disabled = true;
-            btnOff.disabled = true;
-            statusText.className = "status";
-            statusText.innerText = "Sending command...";
-
             try {
-                // 2. Send data to Firebase
-                await setDoc(controlRef, { ledStatus: state }, { merge: true });
-                
-                // 3. Show Success
-                statusText.className = "status success";
-                statusText.innerText = `Success: LED set to ${state ? 'ON' : 'OFF'}`;
+                // Instantly overwrite the value
+                await set(ledRef, state);
+                console.log("Sent: ", state);
             } catch (error) {
-                // Handle Errors
-                console.error("Write error: ", error);
-                statusText.className = "status error";
-                statusText.innerText = "Network Error. Check connection.";
-            } finally {
-                // 4. Unlock UI after a short delay (prevents spam clicking)
-                setTimeout(() => {
-                    btnOn.disabled = false;
-                    btnOff.disabled = false;
-                    
-                    // Reset text back to ready only if there wasn't an error
-                    if (!statusText.className.includes("error")) {
-                        statusText.className = "status";
-                        statusText.innerText = "System Ready";
-                    }
-                }, 1500);
+                console.error("Error: ", error);
             }
         }
     </script>

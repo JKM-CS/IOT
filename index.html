@@ -1,59 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Instant IoT Controller</title>
-    <style>
-        :root { --bg-color: #0f172a; --panel-color: #1e293b; --text-main: #f8fafc; --accent-on: #10b981; --accent-off: #ef4444; }
-        body { margin: 0; font-family: system-ui, sans-serif; background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; box-sizing: border-box; }
-        .card { background-color: var(--panel-color); width: 100%; max-width: 400px; border-radius: 20px; padding: 40px 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); text-align: center; }
-        h1 { margin: 0 0 32px 0; font-size: 1.75rem; }
-        .btn-group { display: flex; gap: 16px; }
-        button { flex: 1; padding: 16px; font-size: 1.1rem; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; color: white; transition: 0.2s; }
-        button:active { transform: scale(0.96); }
-        .btn-on { background-color: var(--accent-on); }
-        .btn-off { background-color: var(--accent-off); }
-    </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Template Generator</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body class="bg-[#F7F3ED] text-[#1A1410] font-sans antialiased">
+    
+    <div id="root"></div>
 
-    <div class="card">
-        <h1>Instant Control</h1>
-        <div class="btn-group">
-            <button class="btn-on" onclick="setLed(true)">Turn ON</button>
-            <button class="btn-off" onclick="setLed(false)">Turn OFF</button>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCxNYefYl-KLmv7Td-AO-btHAk6LvOdw94",
-            authDomain: "iot-jkm.firebaseapp.com",
-            projectId: "iot-jkm",
-            storageBucket: "iot-jkm.firebasestorage.app",
-            messagingSenderId: "10237883579",
-            appId: "1:10237883579:web:6954b9b91cc71b3fd3659e"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        
-        // Target a single, simple node in the database
-        const ledRef = ref(db, 'ledStatus');
-
-        window.setLed = async function(state) {
-            try {
-                // Instantly overwrite the value
-                await set(ledRef, state);
-                console.log("Sent: ", state);
-            } catch (error) {
-                console.error("Error: ", error);
-            }
-        }
-    </script>
-</body>
+    <script type="text/babel" src="app.js"></script>
+  </body>
 </html>

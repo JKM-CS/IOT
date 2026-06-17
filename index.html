@@ -198,7 +198,7 @@
       const qrContainer = document.getElementById("qrcode");
       qrContainer.innerHTML = ""; // Clear old QR code if printing multiple times
       
-      const trackingUrl = "https://yourwebsite.com/track/" + ticketId; // Change to your real domain later
+      const trackingUrl = "https://iot-puce.vercel.app/track/" + ticketId; // Change to your real domain later
       
       new QRCode(qrContainer, {
         text: trackingUrl,

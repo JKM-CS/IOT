@@ -1,26 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>QR Template Generator</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRforge - Native</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-  </head>
-  <body class="bg-[#F7F3ED] text-[#1A1410] font-sans antialiased">
-    
-    <div id="root"></div>
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #F7F3ED; color: #1A1410; }
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+    .step-container { display: none; }
+    .step-container.active { display: block; }
+  </style>
+</head>
+<body class="pb-24">
 
-    <script type="text/babel" src="app.js"></script>
-  </body>
+  <header class="p-6 bg-white border-b border-[#D9CEBC]">
+    <div class="max-w-5xl mx-auto flex justify-between items-center">
+      <div class="text-xl font-bold"><span class="text-[#B8960C] mr-2">⬡</span>QR<span class="text-[#8A7F6E] font-normal">forge</span></div>
+      <span id="step-indicator" class="text-xs font-bold uppercase bg-[#EDE7DC] px-2.5 py-1 rounded text-[#8A7F6E]">Step 1 of 4</span>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto p-6 mt-4">
+
+    <div id="step-1" class="step-container active bg-white p-8 rounded-lg border border-[#D9CEBC] shadow-sm max-w-2xl mx-auto">
+      <h2 class="text-xl font-bold mb-4">1. Data Import</h2>
+      <textarea id="csv-input" rows="5" class="w-full p-3 font-mono text-xs border border-[#D9CEBC] rounded bg-[#F7F3ED] mb-2" placeholder="Table 01, https://cafe.com/table1"></textarea>
+      <button onclick="parseData()" class="w-full py-2 bg-[#1A1410] text-white rounded text-sm font-medium mb-4">Parse Layout Data</button>
+      <button onclick="loadDemoData()" class="w-full py-3 bg-[#F7F3ED] border border-[#D9CEBC] rounded-md text-sm font-medium">Load 5-Table Sandbox Demo</button>
+      <div id="data-status" class="mt-4 text-sm font-bold text-[#27AE60]"></div>
+    </div>
+
+    <div id="step-2" class="step-container bg-white p-8 rounded-lg border border-[#D9CEBC] shadow-sm max-w-4xl mx-auto">
+      <h2 class="text-xl font-bold mb-4">2. Map Placement Zones</h2>
+      <input type="file" id="template-upload" accept="image/*" class="mb-4 text-sm" onchange="handleImageUpload(event)">
+      
+      <div id="canvas-controls" class="hidden mb-4 flex gap-4 justify-center">
+        <button id="btn-qr-zone" onclick="setActiveZone('qr')" class="px-4 py-2 text-xs font-bold uppercase border bg-[#B8960C] text-white border-[#B8960C] rounded">QR Bounds</button>
+        <button id="btn-name-zone" onclick="setActiveZone('name')" class="px-4 py-2 text-xs font-bold uppercase border bg-white text-[#8A7F6E] border-[#D9CEBC] rounded">Text Bounds</button>
+      </div>
+
+      <div class="border overflow-hidden bg-[#EDE7DC] flex justify-center">
+        <canvas id="mapping-canvas" class="cursor-crosshair max-h-[500px] w-auto shadow-md hidden"></canvas>
+      </div>
+    </div>
+
+    <div id="step-3" class="step-container bg-white p-8 rounded-lg border border-[#D9CEBC] shadow-sm max-w-2xl mx-auto">
+      <h2 class="text-xl font-bold mb-4">3. Styling Engine</h2>
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div><label class="text-xs font-bold text-[#8A7F6E]">QR Foreground</label><input type="color" id="color-qr" value="#000000" class="w-full h-10 mt-1 cursor-pointer"></div>
+        <div><label class="text-xs font-bold text-[#8A7F6E]">Text Color</label><input type="color" id="color-text" value="#1A1410" class="w-full h-10 mt-1 cursor-pointer"></div>
+      </div>
+      <div class="mb-4">
+        <label class="text-xs font-bold text-[#8A7F6E]">Font Scale Ratio</label>
+        <input type="range" id="slider-font" min="0.02" max="0.12" step="0.005" value="0.05" class="w-full mt-2 accent-[#B8960C]">
+      </div>
+      <div>
+        <label class="text-xs font-bold text-[#8A7F6E]">Text Alignment</label>
+        <select id="select-align" class="w-full p-2 mt-1 border rounded bg-white text-sm">
+          <option value="left">Left</option>
+          <option value="center" selected>Center</option>
+          <option value="right">Right</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="step-4" class="step-container bg-white p-8 rounded-lg border border-[#D9CEBC] shadow-sm max-w-2xl mx-auto text-center">
+      <h2 class="text-xl font-bold mb-4">4. Export Target Map</h2>
+      <button onclick="generatePDF()" class="w-full py-4 bg-[#27AE60] text-white rounded font-medium text-lg">Compile Document PDF</button>
+      <div id="progress-bar" class="hidden mt-4 text-sm font-mono text-[#8A7F6E]">Processing matrices... please wait.</div>
+    </div>
+
+  </main>
+
+  <nav class="fixed bottom-0 w-full bg-white border-t border-[#D9CEBC] p-4 flex justify-between items-center shadow-lg">
+    <button id="btn-back" onclick="changeStep(-1)" class="px-5 py-2 border rounded font-medium text-sm hidden">← Back</button>
+    <div class="flex-1"></div>
+    <button id="btn-next" onclick="changeStep(1)" class="px-6 py-2 bg-[#B8960C] text-white rounded font-medium text-sm opacity-50 cursor-not-allowed">Next →</button>
+  </nav>
+
+  <script>
+    // System State
+    const AppState = {
+      step: 1,
+      rows: [],
+      templateImg: null,
+      activeZone: 'qr',
+      isDrawing: false,
+      startPos: { x: 0, y: 0 },
+      zones: {
+        qr: null,
+        name: null
+      }
+    };
+
+    // DOM Elements
+    const canvas = document.getElementById('mapping-canvas');
+    const ctx = canvas.getContext('2d');
+    const btnNext = document.getElementById('btn-next');
+    const btnBack = document.getElementById('btn-back');
+    const stepIndicator = document.getElementById('step-indicator');
+
+    // -----------------------------------------
+    // STEP NAVIGATION
+    // -----------------------------------------
+    function changeStep(dir) {
+      if (dir === 1 && !validateStep()) return;
+      
+      document.getElementById(`step-${AppState.step}`).classList.remove('active');
+      AppState.step += dir;
+      document.getElementById(`step-${AppState.step}`).classList.add('active');
+      
+      stepIndicator.innerText = `Step ${AppState.step} of 4`;
+      btnBack.style.display = AppState.step > 1 ? 'block' : 'none';
+      btnNext.style.display = AppState.step < 4 ? 'block' : 'none';
+      
+      validateStep();
+      if (AppState.step === 2 && AppState.templateImg) renderCanvas();
+    }
+
+    function validateStep() {
+      let isValid = false;
+      if (AppState.step === 1) isValid = AppState.rows.length > 0;
+      if (AppState.step === 2) isValid = AppState.templateImg !== null && AppState.zones.qr !== null && AppState.zones.name !== null;
+      if (AppState.step === 3) isValid = true;
+
+      btnNext.classList.toggle('opacity-50', !isValid);
+      btnNext.classList.toggle('cursor-not-allowed', !isValid);
+      return isValid;
+    }
+
+    // -----------------------------------------
+    // STEP 1: DATA LOGIC
+    // -----------------------------------------
+    function loadDemoData() {
+      document.getElementById('csv-input').value = "Table 01, https://cafe.com/t/1\nTable 02, https://cafe.com/t/2\nTable 03, https://cafe.com/t/3\nTable 04, https://cafe.com/t/4\nTable 05, https://cafe.com/t/5";
+      parseData();
+    }
+
+    function parseData() {
+      const raw = document.getElementById('csv-input').value;
+      const parsed = raw.split('\n').map((line, i) => {
+        const parts = line.split(',');
+        return parts.length >= 2 ? { id: i, label: parts[0].trim(), url: parts[1].trim() } : null;
+      }).filter(r => r !== null);
+      
+      if (parsed.length > 0) {
+        AppState.rows = parsed;
+        document.getElementById('data-status').innerText = `✓ ${parsed.length} rows loaded into memory.`;
+        validateStep();
+      } else {
+        alert("Invalid format. Use: Label, URL");
+      }
+    }
+
+    // -----------------------------------------
+    // STEP 2: CANVAS LOGIC
+    // -----------------------------------------
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+          AppState.templateImg = img;
+          canvas.width = img.width;
+          canvas.height = img.height;
+          
+          // Set default standard zones
+          AppState.zones.qr = { x: img.width*0.2, y: img.height*0.2, w: img.width*0.5, h: img.width*0.5 };
+          AppState.zones.name = { x: img.width*0.1, y: img.height*0.8, w: img.width*0.8, h: img.height*0.1 };
+          
+          canvas.classList.remove('hidden');
+          document.getElementById('canvas-controls').classList.remove('hidden');
+          renderCanvas();
+          validateStep();
+        }
+        img.src = event.target.result;
+      }
+      reader.readAsDataURL(file);
+    }
+
+    function setActiveZone(zone) {
+      AppState.activeZone = zone;
+      document.getElementById('btn-qr-zone').className = zone === 'qr' ? "px-4 py-2 text-xs font-bold uppercase border bg-[#B8960C] text-white border-[#B8960C] rounded" : "px-4 py-2 text-xs font-bold uppercase border bg-white text-[#8A7F6E] border-[#D9CEBC] rounded";
+      document.getElementById('btn-name-zone').className = zone === 'name' ? "px-4 py-2 text-xs font-bold uppercase border bg-[#B8960C] text-white border-[#B8960C] rounded" : "px-4 py-2 text-xs font-bold uppercase border bg-white text-[#8A7F6E] border-[#D9CEBC] rounded";
+      renderCanvas();
+    }
+
+    function getMousePos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      return {
+        x: Math.round((e.clientX - rect.left) * scaleX),
+        y: Math.round((e.clientY - rect.top) * scaleY)
+      };
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      AppState.isDrawing = true;
+      AppState.startPos = getMousePos(e);
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!AppState.isDrawing) return;
+      const currentPos = getMousePos(e);
+      
+      AppState.zones[AppState.activeZone] = {
+        x: Math.min(AppState.startPos.x, currentPos.x),
+        y: Math.min(AppState.startPos.y, currentPos.y),
+        w: Math.max(20, Math.abs(AppState.startPos.x - currentPos.x)),
+        h: Math.max(20, Math.abs(AppState.startPos.y - currentPos.y))
+      };
+      renderCanvas();
+    });
+
+    canvas.addEventListener('mouseup', () => AppState.isDrawing = false);
+    canvas.addEventListener('mouseleave', () => AppState.isDrawing = false);
+
+    function renderCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(AppState.templateImg, 0, 0);
+
+      // Draw QR Zone
+      if (AppState.zones.qr) {
+        ctx.strokeStyle = AppState.activeZone === 'qr' ? '#B8960C' : '#8A7F6E';
+        ctx.lineWidth = Math.max(4, canvas.width/150);
+        ctx.strokeRect(AppState.zones.qr.x, AppState.zones.qr.y, AppState.zones.qr.w, AppState.zones.qr.h);
+      }
+      
+      // Draw Text Zone
+      if (AppState.zones.name) {
+        ctx.strokeStyle = AppState.activeZone === 'name' ? '#B8960C' : '#8A7F6E';
+        ctx.lineWidth = Math.max(4, canvas.width/150);
+        ctx.strokeRect(AppState.zones.name.x, AppState.zones.name.y, AppState.zones.name.w, AppState.zones.name.h);
+      }
+    }
+
+    // -----------------------------------------
+    // STEP 4: PDF GENERATION ENGINE
+    // -----------------------------------------
+    async function generatePDF() {
+      document.getElementById('progress-bar').classList.remove('hidden');
+      
+      // Allow UI to update before locking up thread
+      setTimeout(() => {
+        const { jsPDF } = window.jspdf;
+        const imgW = AppState.templateImg.width;
+        const imgH = AppState.templateImg.height;
+        
+        const pdf = new jsPDF({
+          orientation: imgW > imgH ? "l" : "p",
+          unit: "px",
+          format: [imgW, imgH]
+        });
+
+        const scratchCanvas = document.createElement("canvas");
+        scratchCanvas.width = imgW;
+        scratchCanvas.height = imgH;
+        const sCtx = scratchCanvas.getContext("2d");
+        const qrCanvas = document.createElement("canvas");
+
+        const qrColor = document.getElementById('color-qr').value;
+        const textColor = document.getElementById('color-text').value;
+        const fontRatio = parseFloat(document.getElementById('slider-font').value);
+        const align = document.getElementById('select-align').value;
+
+        AppState.rows.forEach((row, index) => {
+          // Reset base
+          sCtx.clearRect(0, 0, imgW, imgH);
+          sCtx.drawImage(AppState.templateImg, 0, 0);
+
+          // Generate QR
+          new QRious({
+            element: qrCanvas,
+            value: row.url,
+            size: AppState.zones.qr.w,
+            foreground: qrColor,
+            level: "H"
+          });
+
+          // Draw QR to template
+          sCtx.drawImage(qrCanvas, AppState.zones.qr.x, AppState.zones.qr.y, AppState.zones.qr.w, AppState.zones.qr.h);
+
+          // Draw Text
+          sCtx.fillStyle = textColor;
+          sCtx.font = `bold ${Math.round(imgW * fontRatio)}px Inter, sans-serif`;
+          sCtx.textBaseline = "middle";
+          
+          let textX = AppState.zones.name.x;
+          sCtx.textAlign = "left";
+          if (align === "center") {
+            textX = AppState.zones.name.x + (AppState.zones.name.w / 2);
+            sCtx.textAlign = "center";
+          } else if (align === "right") {
+            textX = AppState.zones.name.x + AppState.zones.name.w;
+            sCtx.textAlign = "right";
+          }
+
+          sCtx.fillText(row.label, textX, AppState.zones.name.y + (AppState.zones.name.h / 2));
+
+          // Write Page
+          if (index > 0) pdf.addPage([imgW, imgH], imgW > imgH ? "l" : "p");
+          pdf.addImage(scratchCanvas.toDataURL("image/jpeg", 0.95), "JPEG", 0, 0, imgW, imgH);
+        });
+
+        pdf.save("QR_Batch_Distribution.pdf");
+        document.getElementById('progress-bar').innerText = "✓ Export complete. Check downloads.";
+      }, 100);
+    }
+  </script>
+</body>
 </html>

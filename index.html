@@ -1,4 +1,180 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Room Ticketing</title>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    /* --- BASIC UI STYLING --- */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .admin-container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-top: 0;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box; /* Ensures padding doesn't affect width */
+    }
+    button {
+      width: 100%;
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #004494;
+    }
+
+    /* --- 80MM RECEIPT PRINT STYLING --- */
+    #receipt-container {
+      display: none; /* Hidden on the screen */
+    }
+
+    @media print {
+      /* Hide the admin form when printing */
+      .admin-container {
+        display: none;
+      }
+      
+      /* Show and format the receipt */
+      #receipt-container {
+        display: block;
+        width: 80mm;
+        margin: 0;
+        padding: 0;
+        font-family: monospace; /* Thermal printers look best with monospace */
+        font-size: 12px;
+        color: #000;
+      }
+      
+      .receipt-header {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .receipt-details {
+        margin-bottom: 15px;
+      }
+
+      .receipt-details p {
+        margin: 4px 0;
+      }
+
+      .qr-wrapper {
+        text-align: center;
+        margin: 15px 0;
+      }
+
+      #qrcode {
+        display: flex;
+        justify-content: center;
+      }
+
+      .divider {
+        border-top: 1px dashed #000;
+        margin: 10px 0;
+      }
+
+      /* Force 80mm roll setup in browser */
+      @page {
+        margin: 0;
+        size: 80mm auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-container">
+    <h2>New Intake Ticket</h2>
+    <form id="ticketForm">
+      <div class="form-group">
+        <label>Customer Name</label>
+        <input type="text" id="customerName" required>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="text" id="phone">
+      </div>
+      <div class="form-group">
+        <label>Device Model (e.g., PS5, Custom PC, VR Headset)</label>
+        <input type="text" id="device" required>
+      </div>
+      <div class="form-group">
+        <label>Issue Description</label>
+        <textarea id="issue" rows="3" required></textarea>
+      </div>
+      <button type="submit">Print Receipt</button>
+    </form>
+  </div>
+
+  <div id="receipt-container">
+    <div class="receipt-header">
+      <h3 style="margin:0; font-size: 16px;">SERVICE ROOM</h3>
+      <p style="margin:2px 0;">Repair & Diagnostic</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="receipt-details">
+      <p><strong>TICKET ID:</strong> <span id="r-ticket"></span></p>
+      <p><strong>DATE:</strong> <span id="r-date"></span></p>
+      <p><strong>CLIENT:</strong> <span id="r-name"></span></p>
+      <p><strong>DEVICE:</strong> <span id="r-device"></span></p>
+      <p><strong>FAULT:</strong> <span id="r-issue"></span></p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="qr-wrapper">
+      <p style="font-weight: bold; margin-bottom: 5px;">SCAN TO TRACK</p>
+      <div id="qrcode"></div>
+    </div>
+
+    <div class="divider"></div>
+    
+    <div style="text-align: center; font-size: 10px;">
+      <p>Please present this receipt upon pickup.</p>
+      <p>Thank you!</p>
+    </div>
+  </div>
+
+  <script>
     document.getElementById('ticketForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -37,3 +213,6 @@
       }, 300);
     });
   </script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Device</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .tracker-card {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    .status {
+      display: inline-block;
+      background-color: #0056b3;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tracker-card">
+    <h2>Service Status</h2>
+    <p>Ticket Number:</p>
+    <h3 id="displayId" style="color: #555;">Loading...</h3>
+    
+    <div class="status">RECEIVED</div>
+    <p style="font-size: 12px; color: #777; margin-top: 20px;">Your device is in our queue and awaiting diagnostics.</p>
+  </div>
+
+  <script>
+    // Grab the ticket ID from the URL (e.g., ?id=TCK-1234)
+    const urlParams = new URLSearchParams(window.location.search);
+    const ticketId = urlParams.get('id');
+
+    if (ticketId) {
+      document.getElementById('displayId').innerText = ticketId;
+    } else {
+      document.getElementById('displayId').innerText = "Invalid Ticket ID";
+    }
+  </script>
+
+</body>
+</html>

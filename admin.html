@@ -96,14 +96,6 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl flex flex-col justify-between gap-3">
                         <div>
-                            <label class="block text-[10px] uppercase font-bold tracking-wider text-zinc-400 mb-1" id="lbl-wa-num">WhatsApp Target Phone</label>
-                            <input type="text" id="wa-input" class="bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs font-bold text-white outline-none w-full" placeholder="964750...">
-                        </div>
-                        <button onclick="updateWhatsAppNumber()" id="lbl-save-wa-btn" class="bg-yellow-400 hover:bg-yellow-500 text-black font-extrabold text-xs px-4 py-2 rounded-xl transition cursor-pointer w-full">Save Phone Number</button>
-                    </div>
-
-                    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl flex flex-col justify-between gap-3">
-                        <div>
                             <label class="block text-[10px] uppercase font-bold tracking-wider text-zinc-400 mb-1" id="lbl-theme-head">Main Menu Theme</label>
                             <select id="theme-input" class="bg-zinc-950 border border-zinc-800 text-white text-xs font-bold rounded-xl px-3 py-2 outline-none w-full cursor-pointer">
                                 <option value="default">1. Midnight Obsidian (Default Dark)</option>
@@ -120,6 +112,17 @@
                         </div>
                         <button onclick="updateThemeChoice()" id="lbl-save-theme-btn" class="bg-yellow-400 hover:bg-yellow-500 text-black font-extrabold text-xs px-4 py-2 rounded-xl transition cursor-pointer w-full">Apply Theme to Menu</button>
                     </div>
+
+                    <div class="bg-zinc-900 border border-zinc-800 p-4 rounded-2xl flex flex-col justify-between gap-3">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold tracking-wider text-zinc-400 mb-1" id="lbl-new-cat-head">➕ Create New Category</label>
+                            <div class="grid grid-cols-2 gap-2 mt-1">
+                                <input type="text" id="new-cat-id" placeholder="ID (e.g. churros)" class="bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs font-bold text-white outline-none">
+                                <input type="text" id="new-cat-en" placeholder="English Name" class="bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-2 text-xs font-bold text-white outline-none">
+                            </div>
+                        </div>
+                        <button onclick="createNewCategory()" id="lbl-create-cat-btn" class="bg-yellow-400 hover:bg-yellow-500 text-black font-extrabold text-xs px-4 py-2 rounded-xl transition cursor-pointer w-full">Add Category</button>
+                    </div>
                 </div>
             </section>
 
@@ -135,7 +138,7 @@
     <!-- Firebase Engine Modules -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -166,6 +169,7 @@
         window.firestoreGetDoc = getDoc;
         window.firestoreUpdateDoc = updateDoc;
         window.firestoreSetDoc = setDoc;
+        window.firestoreDeleteDoc = deleteDoc;
 
         onAuthStateChanged(auth, (user) => {
             const overlay = document.getElementById("login-overlay");
@@ -230,10 +234,11 @@
                 qrTitleReady: "Table QR Ready",
                 qrDlBtn: "Download Printable QR File →",
                 cfgHead: "Global App Configurations",
-                waNumLbl: "WhatsApp Target Phone",
-                saveWaBtn: "Save Phone Number",
                 themeHeadLbl: "Main Menu Theme",
                 saveThemeBtn: "Apply Theme to Menu",
+                newCatHead: "➕ Create New Category",
+                createCatBtn: "Add Category",
+                deleteCatBtn: "🗑️ Delete Category",
                 loadingStreams: "Downloading live Firestore database streams...",
                 sortOrderLbl: "Sort Order",
                 addItemBtn: "+ Add Item",
@@ -258,9 +263,10 @@
                 deleteBtn: "Delete",
                 deleteConfirm: "Permanently delete",
                 alertValidPrice: "English Name and valid Price required.",
-                alertWaSaved: "WhatsApp Target saved!",
                 alertThemeSaved: "Theme updated!",
-                alertQrEnterTable: "Please enter a table number or code."
+                alertQrEnterTable: "Please enter a table number or code.",
+                alertCatFields: "Please enter both category ID and English name.",
+                alertCatCreated: "Category created successfully!"
             },
             ar: {
                 dir: "rtl",
@@ -281,10 +287,11 @@
                 qrTitleReady: "رمز QR جاهز",
                 qrDlBtn: "تحميل ملف QR للطباعة ←",
                 cfgHead: "الإعدادات العامة للبرنامج",
-                waNumLbl: "رقم الواتساب لاستلام الطلبات",
-                saveWaBtn: "حفظ رقم الهاتف",
                 themeHeadLbl: "مظهر القائمة الرئيسية",
                 saveThemeBtn: "تطبيق المظهر على القائمة",
+                newCatHead: "➕ إضافة تصنيف جديد",
+                createCatBtn: "إضافة التصنيف",
+                deleteCatBtn: "🗑️ حذف التصنيف",
                 loadingStreams: "جاري تحميل البيانات الحية...",
                 sortOrderLbl: "الترتيب",
                 addItemBtn: "+ إضافة صنف",
@@ -309,9 +316,10 @@
                 deleteBtn: "حذف",
                 deleteConfirm: "هل أنت تأكد من حذف",
                 alertValidPrice: "الاسم بالإنجليزية والسعر مطلوبان.",
-                alertWaSaved: "تم حفظ رقم الواتساب!",
                 alertThemeSaved: "تم تحديث المظهر!",
-                alertQrEnterTable: "يرجى أدخال رقم أو رمز الطاولة."
+                alertQrEnterTable: "يرجى أدخال رقم أو رمز الطاولة.",
+                alertCatFields: "يرجى إدخال معرف التصنيف والاسم بالإنجليزية.",
+                alertCatCreated: "تم إنشاء التصنيف بنجاح!"
             }
         };
 
@@ -343,10 +351,10 @@
             document.getElementById("qr-download-btn").textContent = pack.qrDlBtn;
 
             document.getElementById("lbl-cfg-head").textContent = pack.cfgHead;
-            document.getElementById("lbl-wa-num").textContent = pack.waNumLbl;
-            document.getElementById("lbl-save-wa-btn").textContent = pack.saveWaBtn;
             document.getElementById("lbl-theme-head").textContent = pack.themeHeadLbl;
             document.getElementById("lbl-save-theme-btn").textContent = pack.saveThemeBtn;
+            document.getElementById("lbl-new-cat-head").textContent = pack.newCatHead;
+            document.getElementById("lbl-create-cat-btn").textContent = pack.createCatBtn;
             document.getElementById("loading-fallback").textContent = pack.loadingStreams;
 
             if (localDashboardCategories.length > 0) {
@@ -360,7 +368,6 @@
                 const configSnap = await window.firestoreGetDoc(configDocRef);
                 if (configSnap.exists()) {
                     const data = configSnap.data();
-                    document.getElementById("wa-input").value = data.whatsapp_phone || "";
                     document.getElementById("theme-input").value = data.theme || "default";
                 }
 
@@ -407,6 +414,9 @@
                             <input type="number" value="${category.order || 0}" onchange="updateCategoryOrder(${catIndex}, this.value)" class="w-12 bg-zinc-900 border border-zinc-800 text-xs font-bold text-yellow-400 text-center rounded-lg py-1">
                             <button onclick="toggleNewItemForm('${category.docId}')" class="bg-zinc-900 hover:bg-zinc-800 text-yellow-400 font-bold text-xs px-3 py-1.5 rounded-xl border border-zinc-800 transition cursor-pointer">
                                 ${pack.addItemBtn}
+                            </button>
+                            <button onclick="deleteCategoryDoc('${category.docId}', '${category.name_en.replace(/'/g, "\\'")}')" class="bg-red-950/40 hover:bg-red-900/40 text-red-400 font-bold text-xs px-3 py-1.5 rounded-xl border border-red-900/60 transition cursor-pointer">
+                                ${pack.deleteCatBtn}
                             </button>
                         </div>
                     </div>`;
@@ -493,6 +503,39 @@
             document.getElementById(`form-new-${docId}`).classList.toggle("hidden");
         }
 
+        async function createNewCategory() {
+            const pack = adminLangPack[currentAdminLang];
+            const catId = document.getElementById("new-cat-id").value.trim().toLowerCase().replace(/\s+/g, '-');
+            const nameEn = document.getElementById("new-cat-en").value.trim();
+
+            if (!catId || !nameEn) return alert(pack.alertCatFields);
+
+            const newCategoryData = {
+                id: catId,
+                name_en: nameEn,
+                name_ar: nameEn,
+                order: localDashboardCategories.length + 1,
+                items: []
+            };
+
+            const docRef = window.firestoreDoc(window.firebaseDB, "categories", catId);
+            await window.firestoreSetDoc(docRef, newCategoryData);
+            
+            document.getElementById("new-cat-id").value = "";
+            document.getElementById("new-cat-en").value = "";
+            alert(pack.alertCatCreated);
+            loadAdminDashboardData();
+        }
+
+        async function deleteCategoryDoc(docId, catName) {
+            const pack = adminLangPack[currentAdminLang];
+            if (confirm(`${pack.deleteConfirm} category "${catName}" (${docId}) and all its items?`)) {
+                const docRef = window.firestoreDoc(window.firebaseDB, "categories", docId);
+                await window.firestoreDeleteDoc(docRef);
+                loadAdminDashboardData();
+            }
+        }
+
         async function submitNewItem(catIndex, docId) {
             const pack = adminLangPack[currentAdminLang];
             const targetCat = localDashboardCategories[catIndex];
@@ -559,14 +602,6 @@
                 await window.firestoreUpdateDoc(docRef, { items: targetCat.items });
                 renderAdminControlInterface();
             }
-        }
-
-        async function updateWhatsAppNumber() {
-            const pack = adminLangPack[currentAdminLang];
-            const val = document.getElementById("wa-input").value.trim();
-            const configDocRef = window.firestoreDoc(window.firebaseDB, "settings", "config");
-            await window.firestoreSetDoc(configDocRef, { whatsapp_phone: val }, { merge: true });
-            alert(pack.alertWaSaved);
         }
 
         async function updateThemeChoice() {

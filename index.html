@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Maccannoli • Premium Bakery & Café</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Kufi+Arabic:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', 'Noto Kufi Arabic', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        #language-gate { 
+            position: fixed; inset: 0; z-index: 9999; 
+            display: flex !important; flex-direction: column; align-items: center; justify-content: center; padding: 24px;
+        }
+        #application-content-wrapper { display: none; }
+        html, body { height: 100%; min-height: 100dvh; }
+        html { scroll-behavior: smooth; }
+        .scroll-mt-custom { scroll-margin-top: 180px; }
+        body[dir="rtl"] { text-align: right; }
+
+        /* Themes */
+        body.theme-default { background-color: #09090b; color: #fafafa; }
+        body.theme-default .theme-card { background-color: rgba(9, 9, 11, 0.6); border-color: #27272a; }
+        body.theme-default .theme-accent-text { color: #facc15; }
+        body.theme-default .theme-accent-bg { background-color: #facc15; color: #000; }
+        body.theme-default .theme-header { background-color: rgba(9, 9, 11, 0.9); border-color: #27272a; }
+
+        body.theme-amber { background-color: #170d05; color: #fef3c7; }
+        body.theme-amber .theme-card { background-color: rgba(30, 16, 7, 0.6); border-color: #451a03; }
+        body.theme-amber .theme-accent-text { color: #f59e0b; }
+        body.theme-amber .theme-accent-bg { background-color: #f59e0b; color: #000; }
+        body.theme-amber .theme-header { background-color: rgba(23, 13, 5, 0.9); border-color: #451a03; }
+
+        body.theme-rose { background-color: #120a0f; color: #fce7f3; }
+        body.theme-rose .theme-card { background-color: rgba(29, 13, 22, 0.6); border-color: #4c1d24; }
+        body.theme-rose .theme-accent-text { color: #fb7185; }
+        body.theme-rose .theme-accent-bg { background-color: #fb7185; color: #000; }
+        body.theme-rose .theme-header { background-color: rgba(18, 10, 15, 0.9); border-color: #4c1d24; }
+
+        body.theme-matcha { background-color: #0d140e; color: #e2ebd8; }
+        body.theme-matcha .theme-card { background-color: rgba(18, 28, 20, 0.6); border-color: #233727; }
+        body.theme-matcha .theme-accent-text { color: #86efac; }
+        body.theme-matcha .theme-accent-bg { background-color: #4ade80; color: #052e16; }
+        body.theme-matcha .theme-header { background-color: rgba(13, 20, 14, 0.9); border-color: #233727; }
+
+        body.theme-nordic { background-color: #0b1320; color: #e2e8f0; }
+        body.theme-nordic .theme-card { background-color: rgba(15, 23, 42, 0.6); border-color: #1e293b; }
+        body.theme-nordic .theme-accent-text { color: #38bdf8; }
+        body.theme-nordic .theme-accent-bg { background-color: #38bdf8; color: #0f172a; }
+        body.theme-nordic .theme-header { background-color: rgba(11, 19, 32, 0.9); border-color: #1e293b; }
+
+        body.theme-coral { background-color: #1a0c10; color: #ffe4e6; }
+        body.theme-coral .theme-card { background-color: rgba(35, 15, 22, 0.6); border-color: #4c1d24; }
+        body.theme-coral .theme-accent-text { color: #fb7185; }
+        body.theme-coral .theme-accent-bg { background-color: #f43f5e; color: #fff; }
+        body.theme-coral .theme-header { background-color: rgba(26, 12, 16, 0.9); border-color: #4c1d24; }
+
+        body.theme-cyberpunk { background-color: #08090d; color: #f0fdf4; }
+        body.theme-cyberpunk .theme-card { background-color: rgba(15, 23, 42, 0.6); border-color: #1e293b; }
+        body.theme-cyberpunk .theme-accent-text { color: #22d3ee; }
+        body.theme-cyberpunk .theme-accent-bg { background-color: #06b6d4; color: #000; }
+        body.theme-cyberpunk .theme-header { background-color: rgba(8, 9, 13, 0.9); border-color: #1e293b; }
+
+        body.theme-light { background-color: #f8fafc; color: #0f172a; }
+        body.theme-light .theme-card { background-color: #ffffff; border-color: #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        body.theme-light .theme-accent-text { color: #d97706; }
+        body.theme-light .theme-accent-bg { background-color: #d97706; color: #fff; }
+        body.theme-light .theme-header { background-color: rgba(248, 250, 252, 0.9); border-color: #e2e8f0; }
+
+        body.theme-espresso { background-color: #140d0b; color: #f5e6df; }
+        body.theme-espresso .theme-card { background-color: rgba(31, 20, 16, 0.6); border-color: #3b241d; }
+        body.theme-espresso .theme-accent-text { color: #d97706; }
+        body.theme-espresso .theme-accent-bg { background-color: #d97706; color: #fff; }
+        body.theme-espresso .theme-header { background-color: rgba(20, 13, 11, 0.9); border-color: #3b241d; }
+
+        body.theme-lavender { background-color: #110d1a; color: #f3e8ff; }
+        body.theme-lavender .theme-card { background-color: rgba(26, 19, 41, 0.6); border-color: #3b2a5c; }
+        body.theme-lavender .theme-accent-text { color: #c084fc; }
+        body.theme-lavender .theme-accent-bg { background-color: #c084fc; color: #000; }
+        body.theme-lavender .theme-header { background-color: rgba(17, 13, 26, 0.9); border-color: #3b2a5c; }
+    </style>
+</head>
+<body class="theme-default min-h-screen antialiased pb-44">
+
+    <!-- Language Gate -->
+    <div id="language-gate" class="theme-header">
+        <div class="theme-card border p-8 rounded-3xl text-center w-full max-w-[340px] shadow-2xl">
+            <div class="mx-auto w-16 h-16 rounded-xl overflow-hidden border-2 border-zinc-800 mb-4">
+                <img src="IMG_6187.png" alt="Maccannoli Logo" class="w-full h-full object-cover">
+            </div>
+            <h2 class="text-lg font-black tracking-widest theme-accent-text mb-1">MACCANNOLI</h2>
+            <p class="opacity-60 text-[11px] leading-normal mb-6">Choose your language / زمانت هەڵبژێرە / اختر لغتك</p>
+            
+            <div class="flex flex-col gap-2">
+                <button onclick="bootAppEngine('en')" class="w-full theme-card hover:opacity-80 border font-bold py-3 px-4 rounded-xl text-xs active:scale-[0.98]">English</button>
+                <button onclick="bootAppEngine('ku')" class="w-full theme-card hover:opacity-80 border font-bold py-3 px-4 rounded-xl text-xs active:scale-[0.98]">کوردی (Kurdî)</button>
+                <button onclick="bootAppEngine('ar')" class="w-full theme-card hover:opacity-80 border font-bold py-3 px-4 rounded-xl text-xs active:scale-[0.98]">العربية</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Wrapper -->
+    <div id="application-content-wrapper" class="px-4 max-w-5xl mx-auto">
+        
+        <!-- Sticky Header & Search Bar -->
+        <div class="sticky top-0 z-40 theme-header backdrop-blur-md border-b py-3 mb-6">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                    <img src="IMG_6187.png" class="w-7 h-7 rounded-md object-cover" alt="M">
+                    <span class="font-extrabold text-sm tracking-wider theme-accent-text">MACCANNOLI</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <select id="lang-switcher" onchange="bootAppEngine(this.value)" class="theme-card border px-2.5 py-1.5 rounded-xl text-xs font-bold outline-none cursor-pointer">
+                        <option value="en">EN</option>
+                        <option value="ku">KU</option>
+                        <option value="ar">AR</option>
+                    </select>
+                    <div id="table-badge-el" class="theme-accent-bg font-black text-[11px] px-3 py-1.5 rounded-full hidden">📍 Table --</div>
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <input type="text" id="search-bar" oninput="handleSearch(this.value)" placeholder="🔍 Search menu items..." class="w-full theme-card border rounded-xl px-3 py-2 text-xs font-medium outline-none">
+            </div>
+            
+            <div class="flex gap-2 overflow-x-auto no-scrollbar py-1" id="category-pills-container"></div>
+        </div>
+
+        <header class="text-center theme-card border p-6 rounded-3xl mb-10">
+            <div class="mx-auto w-20 h-20 rounded-2xl overflow-hidden border-2 border-zinc-800"><img src="IMG_6187.png" alt="Logo" class="w-full h-full object-cover"></div>
+            <h1 class="text-2xl font-black tracking-widest mt-3">MACCANNOLI</h1>
+            <div class="flex justify-center gap-2 text-xs opacity-60 mt-1"><span id="txt-meta-type">Bakery & Café</span>•<span id="txt-meta-loc">Erbil</span></div>
+            <p class="text-xs opacity-70 mt-4 leading-relaxed max-w-md mx-auto" id="txt-hero-desc">Loading menu preferences...</p>
+        </header>
+
+        <main id="menu-cards-container" class="space-y-4"></main>
+
+        <footer class="mt-20 border-t border-zinc-800/40 pt-10 text-center pb-12">
+            <p class="text-[10px] tracking-wider opacity-50 uppercase font-medium" id="txt-thanks">Thank you and enjoy • Maccannoli Bakery & Café</p>
+        </footer>
+    </div>
+
+    <!-- Floating Bottom Cart -->
+    <div id="cart-bar" class="fixed bottom-4 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-full md:max-w-xl theme-card border backdrop-blur-md p-4 rounded-2xl shadow-2xl hidden flex-col gap-3 z-50">
+        <div class="flex justify-between items-center border-b border-zinc-800/40 pb-2">
+            <div>
+                <p class="text-xs font-bold" id="txt-cart-lbl">Selected Order</p>
+                <p class="text-[11px] opacity-60" id="cart-items-count-val">0 items selected</p>
+            </div>
+            <div class="text-right">
+                <p class="text-[9px] opacity-60 uppercase tracking-wide" id="txt-total-lbl">Total Bill</p>
+                <p class="text-base font-black theme-accent-text" id="cart-total-price-val">0 IQD</p>
+            </div>
+        </div>
+        
+        <div class="flex gap-1.5 overflow-x-auto no-scrollbar" id="cart-tags-container"></div>
+        
+        <div>
+            <input type="text" id="order-notes" placeholder="✍️ Special instructions..." class="w-full theme-card border rounded-xl px-3 py-1.5 text-xs outline-none">
+        </div>
+
+        <div class="flex gap-2">
+            <button class="theme-card border opacity-80 font-bold px-4 py-3 rounded-xl text-xs cursor-pointer active:scale-95" onclick="clearCart()" id="txt-clear-btn">Clear</button>
+            <button class="flex-1 theme-accent-bg font-extrabold px-4 py-3 rounded-xl text-xs tracking-wider uppercase cursor-pointer active:scale-95" onclick="submitOrderViaWhatsApp()" id="txt-submit-btn">Submit Order to Waiters</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDpMpNyWRP3u6h4N4o2QPpWJ4cbvHtSrvM",
+            authDomain: "maccannoli-83c54.firebaseapp.com",
+            projectId: "maccannoli-83c54",
+            storageBucket: "maccannoli-83c54.firebasestorage.app",
+            messagingSenderId: "199923494866",
+            appId: "1:199923494866:web:69bd2235d45fccce03220b",
+            measurementId: "G-EEMGQ3718G"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.firebaseDB = db;
+        window.firestoreGetDocs = getDocs;
+        window.firestoreCollection = collection;
+        window.firestoreDoc = doc;
+        window.firestoreGetDoc = getDoc;
+    </script>
+
+    <script>
+        const langPack = {
+            en: {
+                dir: "ltr", metaType: "Bakery & Café", metaLoc: "Erbil",
+                desc: "Tap items to build your selection. When finished, press the checkout button below to route your dynamic table request straight to our waiters via WhatsApp.",
+                thanks: "Thank you and enjoy • Maccannoli Bakery & Café",
+                cartL: "Selected Order", totalL: "Total Bill", clearL: "Clear", submitL: "Submit Order to Waiters",
+                tNo: "Table", itemSingular: "item selected", itemPlural: "items selected",
+                soldOutBadge: "SOLD OUT",
+                searchPlaceholder: "🔍 Search menu items...",
+                notesPlaceholder: " Special instructions (e.g. Extra hot, no sugar)...",
+                waG: "Hello Maccannoli 👋", waT: "👉 ORDER FROM TABLE", waO: "My Order", waTot: "Total", waNotes: "Notes"
+            },
+            ku: {
+                dir: "rtl", metaType: "نانەواخانە و کافێ", metaLoc: "هەولێر",
+                desc: "کلیک لەسەر بابەتەکان بکە بۆ زیادکردنیان. کاتێک تەواو بوویت، دوگمەی ناردن لە خوارەوە دابگرە بۆ ناردنی داواکارییەکەت ڕاستەوخۆ بۆ کارمەندانمان لە ڕێگەی واتسئەپەوە.",
+                thanks: "سوپاس بۆ سەردانەکەتان • نانەواخانە و کافێی ماکانۆلی",
+                cartL: "داواکاری هەڵبژێردراو", totalL: "کۆیی گشتی", clearL: "سڕینەوە", submitL: "ناردنی داواکاری بۆ کارمەندان",
+                tNo: "مێزی", itemSingular: "بابەت هەڵبژێردراوە", itemPlural: "بابەت هەڵبژێردراون",
+                soldOutBadge: "تەواوبوو",
+                searchPlaceholder: "🔍 گەڕان لە مێنیو...",
+                notesPlaceholder: " تێبینیی تایبەت (بۆ نموونە: بێ شەکر، زۆر گەرم)...",
+                waG: "سڵاو ماکانۆلی 👋", waT: "👉 داواکاری لە مێزی", waO: "داواکارییەکەم", waTot: "کۆیی گشتی", waNotes: "تێبینییەکان"
+            },
+            ar: {
+                dir: "rtl", metaType: "مخبز ومقهى", metaLoc: "أربيل",
+                desc: "اضغط على الأصناف لبناء طلبك. عند الانتهاء، اضغط على زر إرسال الطلب في الأسفل لإرسال طلب الطاولة الخاص بك مباشرة إلى طاقمنا عبر الواتساب.",
+                thanks: "شكراً لكم واستمتعوا بوقتكم • مخبز ومقهى ماكانولي",
+                cartL: "الطلب المحدد", totalL: "الحساب الإجمالي", clearL: "مسح", submitL: "إرسال الطلب إلى الطاقم",
+                tNo: "طاولة", itemSingular: "صنف واحد مختار", itemPlural: "أصناف مختارة",
+                soldOutBadge: "نفذت الكمية",
+                searchPlaceholder: "🔍 بحث في القائمة...",
+                notesPlaceholder: " ملاحظات خاصة (مثال: بدون سكر، ساخن جداً)...",
+                waG: "مرحباً ماكانولي 👋", waT: "👉 طلب من طاولة", waO: "طلبي", waTot: "المجموع الكلي", waNotes: "ملاحظات"
+            }
+        };
+
+        let currentLang = 'en';
+        let cart = {}; 
+        let flatPricesLookup = {};
+        let activeWhatsAppNumber = "9647508244835";
+        let loadedMenuData = [];
+        let searchQuery = "";
+
+        const tableNum = new URLSearchParams(window.location.search).get('table');
+
+        function checkFirebaseReady() {
+            if (window.firebaseDB) {
+                fetchSettingsAndMenu();
+            } else {
+                setTimeout(checkFirebaseReady, 100);
+            }
+        }
+        window.addEventListener('DOMContentLoaded', checkFirebaseReady);
+
+        async function fetchSettingsAndMenu() {
+            try {
+                const configDocRef = window.firestoreDoc(window.firebaseDB, "settings", "config");
+                const configSnap = await window.firestoreGetDoc(configDocRef);
+                if (configSnap.exists()) {
+                    const data = configSnap.data();
+                    activeWhatsAppNumber = data.whatsapp_phone || activeWhatsAppNumber;
+                    if (data.theme) document.body.className = `theme-${data.theme} min-h-screen antialiased pb-44`;
+                }
+
+                const querySnapshot = await window.firestoreGetDocs(window.firestoreCollection(window.firebaseDB, "categories"));
+                let rawCategories = [];
+                querySnapshot.forEach((doc) => {
+                    rawCategories.push({ docId: doc.id, ...doc.data() });
+                });
+
+                rawCategories.sort((a, b) => (a.order || 0) - (b.order || 0));
+                
+                const pastriesCat = rawCategories.find(c => c.id === 'pastries');
+                rawCategories.forEach(cat => {
+                    if (cat.id === 'croissants' && !cat.image && pastriesCat) {
+                        cat.image = pastriesCat.image;
+                    }
+                    if (cat.items && Array.isArray(cat.items)) {
+                        cat.items.sort((a, b) => (a.order || 0) - (b.order || 0));
+                    }
+                });
+
+                loadedMenuData = rawCategories;
+                bootAppEngine('en');
+            } catch (err) {
+                console.error("Error connecting to Firestore data nodes:", err);
+            }
+        }
+
+        function bootAppEngine(lang) {
+            currentLang = lang;
+            document.getElementById("language-gate").style.setProperty("display", "none", "important");
+            document.getElementById("application-content-wrapper").style.setProperty("display", "block", "important");
+            document.body.setAttribute("dir", langPack[lang].dir);
+            document.getElementById("lang-switcher").value = lang;
+
+            flatPricesLookup = {};
+            
+            const pillsContainer = document.getElementById("category-pills-container");
+            pillsContainer.innerHTML = "";
+
+            loadedMenuData.forEach(cat => {
+                // Check if category has any visible items
+                const visibleItems = (cat.items || []).filter(item => item.hidden !== true);
+                if (visibleItems.length === 0) return;
+
+                const localizedCatName = cat[`name_${lang}`] || cat.name_en;
+                const pill = document.createElement("a");
+                pill.href = `#${cat.id}`;
+                pill.className = "theme-card border opacity-80 text-[11px] font-bold px-4 py-2 rounded-xl whitespace-nowrap active:scale-95";
+                pill.textContent = localizedCatName;
+                pillsContainer.appendChild(pill);
+
+                visibleItems.forEach(item => {
+                    const localizedItemName = item[`name_${lang}`] || item.name_en;
+                    flatPricesLookup[localizedItemName] = item.price;
+                });
+            });
+
+            const pack = langPack[lang];
+            document.getElementById("txt-meta-type").textContent = pack.metaType;
+            document.getElementById("txt-meta-loc").textContent = pack.metaLoc;
+            document.getElementById("txt-hero-desc").textContent = pack.desc;
+            document.getElementById("txt-thanks").textContent = pack.thanks;
+            document.getElementById("txt-cart-lbl").textContent = pack.cartL;
+            document.getElementById("txt-total-lbl").textContent = pack.totalL;
+            document.getElementById("txt-clear-btn").textContent = pack.clearL;
+            document.getElementById("txt-submit-btn").textContent = pack.submitL;
+
+            document.getElementById("search-bar").placeholder = pack.searchPlaceholder;
+            document.getElementById("order-notes").placeholder = pack.notesPlaceholder;
+
+            if (tableNum) {
+                const badge = document.getElementById("table-badge-el");
+                badge.textContent = `📍 ${pack.tNo} ${tableNum}`;
+                badge.style.setProperty("display", "flex", "important");
+            }
+
+            renderMenuGridCards(loadedMenuData, lang);
+            syncCartUIState();
+        }
+
+        function handleSearch(q) {
+            searchQuery = q.toLowerCase().trim();
+            renderMenuGridCards(loadedMenuData, currentLang);
+        }
+
+        function renderMenuGridCards(data, lang) {
+            const container = document.getElementById("menu-cards-container");
+            container.innerHTML = "";
+            const pack = langPack[lang];
+
+            data.forEach(cat => {
+                const localizedCatName = cat[`name_${lang}`] || cat.name_en;
+                
+                const sect = document.createElement("div");
+                sect.id = cat.id;
+                sect.className = "scroll-mt-custom"; 
+
+                let coverBannerBlock = cat.banner ? `<div class="w-full h-28 md:h-40 rounded-2xl overflow-hidden mb-3 border border-zinc-800"><img src="${cat.banner}" class="w-full h-full object-cover"></div>` : "";
+
+                let titleBlock = `
+                    ${coverBannerBlock}
+                    <div class="flex items-center gap-3 mb-4 border-b border-zinc-800/40 pb-2 mt-6">
+                        ${cat.image ? `<img src="${cat.image}" class="w-10 h-10 rounded-xl object-cover border border-zinc-800" alt="">` : ""}
+                        <h2 class="text-lg font-black tracking-wide">${localizedCatName}</h2>
+                    </div>`;
+                
+                let cardsBlock = `<div class="grid grid-cols-1 md:grid-cols-2 gap-3">`;
+                let displayableCount = 0;
+
+                if (cat.items && Array.isArray(cat.items)) {
+                    cat.items.forEach(item => {
+                        // Skip completely if item is marked hidden
+                        if (item.hidden === true) return;
+
+                        const localizedItemName = item[`name_${lang}`] || item.name_en;
+                        const localizedDesc = item[`desc_${lang}`] || item.desc_en || "";
+
+                        const matchEn = (item.name_en || '').toLowerCase().includes(searchQuery);
+                        const matchKu = (item.name_ku || '').toLowerCase().includes(searchQuery);
+                        const matchAr = (item.name_ar || '').toLowerCase().includes(searchQuery);
+
+                        if (searchQuery && !matchEn && !matchKu && !matchAr) return;
+                        
+                        displayableCount++;
+                        const safeId = btoa(encodeURIComponent(localizedItemName)).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+                        const isSoldOut = item.outOfStock === true;
+
+                        let tagsHtml = "";
+                        if (item.tags && Array.isArray(item.tags)) {
+                            tagsHtml = item.tags.map(t => `<span class="text-[9px] px-2 py-0.5 rounded-full border border-zinc-700 opacity-80">${t}</span>`).join(" ");
+                        }
+                        
+                        cardsBlock += `
+                            <div class="theme-card border rounded-2xl p-4 flex justify-between items-center ${isSoldOut ? 'opacity-50 grayscale pointer-events-none' : ''}">
+                                <div style="padding-right: 8px;">
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-sm font-semibold">${localizedItemName}</h3>
+                                        ${isSoldOut ? `<span class="bg-red-500/20 text-red-400 font-bold text-[9px] px-2 py-0.5 rounded-md border border-red-500/30">${pack.soldOutBadge}</span>` : ''}
+                                    </div>
+                                    ${localizedDesc ? `<p class="text-[11px] opacity-60 mt-0.5">${localizedDesc}</p>` : ''}
+                                    <div class="flex items-center gap-2 mt-2">
+                                        <p class="text-xs font-bold theme-accent-text">${item.price.toLocaleString()} <span class="text-[10px] opacity-80 font-medium">IQD</span></p>
+                                        ${tagsHtml}
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="hidden items-center gap-2" id="group-${safeId}">
+                                        <button class="w-8 h-8 rounded-lg theme-card border font-bold text-sm cursor-pointer flex items-center justify-center active:scale-90" onclick="modifyQty('${safeId}', '${encodeURIComponent(localizedItemName)}', -1)">-</button>
+                                        <span class="theme-accent-text font-extrabold text-sm min-w-4 text-center" id="val-${safeId}">0</span>
+                                    </div>
+                                    ${!isSoldOut ? `<button class="w-8 h-8 rounded-lg theme-accent-bg font-bold text-sm cursor-pointer flex items-center justify-center active:scale-90" onclick="modifyQty('${safeId}', '${encodeURIComponent(localizedItemName)}', 1)">+</button>` : ''}
+                                </div>
+                            </div>`;
+                    });
+                }
+                cardsBlock += `</div>`;
+
+                if (displayableCount > 0) {
+                    sect.innerHTML = titleBlock + cardsBlock;
+                    container.appendChild(sect);
+                }
+            });
+        }
+
+        function modifyQty(safeId, rawEncodedName, change) {
+            const itemName = decodeURIComponent(rawEncodedName);
+            let current = cart[itemName] || 0;
+            current += change;
+            
+            if (current <= 0) delete cart[itemName];
+            else cart[itemName] = current;
+
+            syncCartUIState();
+        }
+
+        function syncCartUIState() {
+            let totalCount = 0;
+            let totalPrice = 0;
+            
+            document.querySelectorAll("[id^='group-']").forEach(el => el.style.setProperty("display", "none", "important"));
+            document.querySelectorAll("[id^='val-']").forEach(el => el.textContent = "0");
+
+            const tagsContainer = document.getElementById("cart-tags-container");
+            tagsContainer.innerHTML = "";
+
+            Object.entries(cart).forEach(([name, qty]) => {
+                totalCount += qty;
+                totalPrice += (flatPricesLookup[name] || 0) * qty;
+
+                const safeId = btoa(encodeURIComponent(name)).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+                const group = document.getElementById(`group-${safeId}`);
+                const val = document.getElementById(`val-${safeId}`);
+                
+                if (group && val) {
+                    group.style.setProperty("display", "flex", "important");
+                    val.textContent = qty;
+                }
+
+                const tag = document.createElement("div");
+                tag.className = "theme-card border font-semibold text-[11px] px-3 py-1 rounded-lg whitespace-nowrap opacity-90";
+                tag.innerHTML = `<span class="theme-accent-text font-bold">${qty}x</span> ${name}`;
+                tagsContainer.appendChild(tag);
+            });
+
+            const bar = document.getElementById("cart-bar");
+            if (totalCount === 0) {
+                bar.style.setProperty("display", "none", "important");
+            } else {
+                bar.style.setProperty("display", "flex", "important");
+                const pack = langPack[currentLang];
+                document.getElementById("cart-items-count-val").textContent = `${totalCount} ${totalCount === 1 ? pack.itemSingular : pack.itemPlural}`;
+                document.getElementById("cart-total-price-val").textContent = `${totalPrice.toLocaleString()} IQD`;
+            }
+        }
+
+        function clearCart() {
+            cart = {};
+            document.getElementById("order-notes").value = "";
+            syncCartUIState();
+        }
+
+        function submitOrderViaWhatsApp() {
+            const pack = langPack[currentLang];
+            let msg = `${pack.waG}\n`;
+            if (tableNum) msg += `${pack.waT}: ${tableNum}\n\n`;
+            else msg += "\n";
+
+            msg += `${pack.waO}:\n`;
+            let total = 0;
+
+            Object.entries(cart).forEach(([name, qty]) => {
+                const price = flatPricesLookup[name] || 0;
+                msg += `• ${qty}x ${name} - ${(price * qty).toLocaleString()} IQD\n`;
+                total += price * qty;
+            });
+
+            msg += `\n${pack.waTot}: ${total.toLocaleString()} IQD`;
+
+            const notesVal = document.getElementById("order-notes").value.trim();
+            if (notesVal) msg += `\n\n📌 ${pack.waNotes}: ${notesVal}`;
+            
+            const targetUrl = `https://wa.me/${activeWhatsAppNumber}?text=${encodeURIComponent(msg)}`;
+            window.open(targetUrl, "_blank", "noopener,noreferrer") || (window.location.href = targetUrl);
+        }
+    </script>
+</body>
+</html>

@@ -23,7 +23,6 @@
             <div class="flex justify-end mb-2">
                 <select id="login-lang-select" onchange="switchAdminLanguage(this.value)" class="bg-zinc-950 border border-zinc-800 text-xs font-bold text-yellow-400 rounded-lg px-2 py-1 outline-none cursor-pointer">
                     <option value="en">English</option>
-                    <option value="ku">کوردی</option>
                     <option value="ar">العربية</option>
                 </select>
             </div>
@@ -65,7 +64,6 @@
                 <div class="flex items-center gap-3">
                     <select id="dash-lang-select" onchange="switchAdminLanguage(this.value)" class="bg-zinc-900 border border-zinc-800 text-xs font-bold text-yellow-400 rounded-xl px-3 py-2 outline-none cursor-pointer">
                         <option value="en">EN (English)</option>
-                        <option value="ku">KU (کوردی)</option>
                         <option value="ar">AR (العربية)</option>
                     </select>
                     <button onclick="handleLogout()" id="lbl-logout-btn" class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-zinc-200 text-xs font-bold px-4 py-2 rounded-2xl transition cursor-pointer">
@@ -241,11 +239,9 @@
                 addItemBtn: "+ Add Item",
                 addNewItemHead: "Add New Item to",
                 enNamePlace: "English Name",
-                kuNamePlace: "Kurdish Name",
                 arNamePlace: "Arabic Name",
                 pricePlace: "Price (IQD)",
                 enDescPlace: "English Description",
-                kuDescPlace: "Kurdish Description",
                 arDescPlace: "Arabic Description",
                 tagsPlace: "Tags comma separated (e.g. Vegan, Nuts)",
                 cancelBtn: "Cancel",
@@ -265,59 +261,6 @@
                 alertWaSaved: "WhatsApp Target saved!",
                 alertThemeSaved: "Theme updated!",
                 alertQrEnterTable: "Please enter a table number or code."
-            },
-            ku: {
-                dir: "rtl",
-                loginTitle: "داشبۆردی چۆرۆس لاند",
-                loginSub: "تکایە بچۆ ژوورەوە بۆ بەڕێوەبردنی مێنیو و ڕێکخستنەکان.",
-                emailLbl: "ئیمەیڵ",
-                passLbl: "وشەی تێپەڕ",
-                loginBtn: "چوونە ژوورەوە",
-                verifyingToken: "پشکنینی زانیارییەکان...",
-                loginError: "ڕێگەنەدرا: ئیمەیڵ یان وشەی تێپەڕ هەڵەیە.",
-                dashTitle: "پۆڕتاڵی چۆرۆس لاند",
-                dashStatus: "پەیوەندی ڕاستەوخۆ چالاکە",
-                logoutBtn: "چوونەدەرەوە",
-                qrHead: "🖨️ دروستکەری QR بۆ مێزەکان",
-                qrDesc: "پشتیوانی ژمارەی مێز، کۆد و ناوی شوێنەکان دەکات (بۆ نموونە: '5', 'VIP-1', 'تەراس').",
-                qrInputPlace: "ژمارە یان کۆدی مێز (بۆ نموونە 5 یان VIP-1)",
-                qrGenBtn: "دروستکردنی کۆدی QR",
-                qrTitleReady: "کۆدی QR ئامادەیە",
-                qrDlBtn: "داگرتنی پەڕگەی QR بۆ چاپ →",
-                cfgHead: "ڕێکخستنە گشتییەکان",
-                waNumLbl: "ژمارەی واتسئەپی وەرگرتنی داواکاری",
-                saveWaBtn: "پاشەکەوتکردنی ژمارە",
-                themeHeadLbl: "ڕووکاری مێنیوی سەرەکی",
-                saveThemeBtn: "جێبەجێکردنی ڕووکار",
-                loadingStreams: "داگرتنی زانیارییەکان لە بنکەی دراوە...",
-                sortOrderLbl: "ڕیزبەندی",
-                addItemBtn: "+ زیادرکردنی بابەت",
-                addNewItemHead: "زیادکردنی بابەتی نوێ بۆ",
-                enNamePlace: "ناوی ئینگلیزی",
-                kuNamePlace: "ناوی کوردی",
-                arNamePlace: "ناوی عەرەبی",
-                pricePlace: "نرخ (IQD)",
-                enDescPlace: "پێناسی ئینگلیزی",
-                kuDescPlace: "پێناسی کوردی",
-                arDescPlace: "پێناسی عەرەبی",
-                tagsPlace: "تاگەکان بە کۆما جیابکەرەوە (بۆ نموونە: تایبەت، بەتام)",
-                cancelBtn: "پەشیمانبوونەوە",
-                saveItemBtn: "پاشەکەوتکردنی بابەت",
-                thItemName: "ناوی بابەت",
-                thPrice: "نرخ (IQD)",
-                thControls: "بەڕێوەبردنی بەردەستبوون و شاردنەوە",
-                thActions: "کردارەکان",
-                badgeHidden: "👁️ شاراوەیە",
-                inStock: "بەردەستە",
-                soldOut: "تەواوبوو",
-                hide: "شاردنەوە",
-                unhide: "دەرخستنەوە",
-                deleteBtn: "سڕینەوە",
-                deleteConfirm: "ئایا دڵنیایت لە سڕینەوەی",
-                alertValidPrice: "ناوی ئینگلیزی و نرخی دروست پێویستە.",
-                alertWaSaved: "ژمارەی واتسئەپ پاشەکەوت کرا!",
-                alertThemeSaved: "ڕووکار نوێکرایەوە!",
-                alertQrEnterTable: "تکایە ژمارە یان کۆدی مێز بنووسە."
             },
             ar: {
                 dir: "rtl",
@@ -347,11 +290,9 @@
                 addItemBtn: "+ إضافة صنف",
                 addNewItemHead: "إضافة صنف جديد إلى",
                 enNamePlace: "الاسم بالإنجليزية",
-                kuNamePlace: "الاسم بالكردية",
                 arNamePlace: "الاسم بالعربية",
                 pricePlace: "السعر (د.ع)",
                 enDescPlace: "الوصف بالإنجليزية",
-                kuDescPlace: "الوصف بالكردية",
                 arDescPlace: "الوصف بالعربية",
                 tagsPlace: "العلامات مفصولة بفواصل (مثال: نباتي، مكسرات)",
                 cancelBtn: "إلغاء",
@@ -450,7 +391,7 @@
                 const catBox = document.createElement("section");
                 catBox.className = "bg-zinc-950 border border-zinc-900 rounded-3xl p-6 shadow-xl mb-6";
 
-                const categoryDisplayName = currentAdminLang === 'ku' ? (category.name_ku || category.name_en) : (currentAdminLang === 'ar' ? (category.name_ar || category.name_en) : category.name_en);
+                const categoryDisplayName = currentAdminLang === 'ar' ? (category.name_ar || category.name_en) : category.name_en;
 
                 let headerBlock = `
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-zinc-900 pb-4 mb-4 gap-4">
@@ -458,7 +399,7 @@
                             ${category.image ? `<img src="${category.image}" class="w-10 h-10 rounded-xl object-cover border border-zinc-800">` : ""}
                             <div>
                                 <h2 class="text-base font-black text-white">${categoryDisplayName} <span class="text-zinc-600 text-xs font-normal">(${category.docId})</span></h2>
-                                <p class="text-xs text-zinc-500">${category.name_en} • ${category.name_ar || ''} • ${category.name_ku || ''}</p>
+                                <p class="text-xs text-zinc-500">${category.name_en} • ${category.name_ar || ''}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
@@ -473,15 +414,13 @@
                 let newItemFormBlock = `
                     <div id="form-new-${category.docId}" class="hidden bg-zinc-900/40 border border-zinc-900 rounded-2xl p-4 mb-4 space-y-3">
                         <p class="text-[11px] uppercase font-bold tracking-wider text-yellow-400/80">${pack.addNewItemHead} ${categoryDisplayName}</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                             <input type="text" id="add-en-${category.docId}" placeholder="${pack.enNamePlace}" class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs text-white outline-none">
-                            <input type="text" id="add-ku-${category.docId}" placeholder="${pack.kuNamePlace}" class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs text-white outline-none text-right">
                             <input type="text" id="add-ar-${category.docId}" placeholder="${pack.arNamePlace}" class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs text-white outline-none text-right">
                             <input type="number" id="add-price-${category.docId}" placeholder="${pack.pricePlace}" class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs text-yellow-400 font-bold outline-none">
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <input type="text" id="add-desc-en-${category.docId}" placeholder="${pack.enDescPlace}" class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs text-white outline-none">
-                            <input type="text" id="add-desc-ku-${category.docId}" placeholder="${pack.kuDescPlace}" class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs text-white outline-none text-right">
                             <input type="text" id="add-desc-ar-${category.docId}" placeholder="${pack.arDescPlace}" class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs text-white outline-none text-right">
                         </div>
                         <input type="text" id="add-tags-${category.docId}" placeholder="${pack.tagsPlace}" class="bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs text-white outline-none w-full">
@@ -507,8 +446,8 @@
                         const isSoldOut = item.outOfStock === true;
                         const isHidden = item.hidden === true;
 
-                        const itemPrimaryName = currentAdminLang === 'ku' ? (item.name_ku || item.name_en) : (currentAdminLang === 'ar' ? (item.name_ar || item.name_en) : item.name_en);
-                        const itemDesc = currentAdminLang === 'ku' ? (item.desc_ku || item.desc_en) : (currentAdminLang === 'ar' ? (item.desc_ar || item.desc_en) : item.desc_en);
+                        const itemPrimaryName = currentAdminLang === 'ar' ? (item.name_ar || item.name_en) : item.name_en;
+                        const itemDesc = currentAdminLang === 'ar' ? (item.desc_ar || item.desc_en) : item.desc_en;
 
                         itemsTableBlock += `
                             <tr class="border-b border-zinc-900/50 hover:bg-zinc-900/20 ${isHidden ? 'opacity-40' : ''}">
@@ -558,12 +497,10 @@
             const pack = adminLangPack[currentAdminLang];
             const targetCat = localDashboardCategories[catIndex];
             const nameEn = document.getElementById(`add-en-${docId}`).value.trim();
-            const nameKu = document.getElementById(`add-ku-${docId}`).value.trim();
             const nameAr = document.getElementById(`add-ar-${docId}`).value.trim();
             const priceVal = parseFloat(document.getElementById(`add-price-${docId}`).value);
             
             const descEn = document.getElementById(`add-desc-en-${docId}`).value.trim();
-            const descKu = document.getElementById(`add-desc-ku-${docId}`).value.trim();
             const descAr = document.getElementById(`add-desc-ar-${docId}`).value.trim();
             const tagsRaw = document.getElementById(`add-tags-${docId}`).value.trim();
 
@@ -572,9 +509,9 @@
             const tagsArray = tagsRaw ? tagsRaw.split(",").map(t => t.trim()) : [];
 
             const newItem = {
-                name_en: nameEn, name_ku: nameKu || nameEn, name_ar: nameAr || nameEn,
+                name_en: nameEn, name_ar: nameAr || nameEn,
                 price: priceVal, 
-                desc_en: descEn, desc_ku: descKu || descEn, desc_ar: descAr || descEn,
+                desc_en: descEn, desc_ar: descAr || descEn,
                 tags: tagsArray, outOfStock: false, hidden: false
             };
 

@@ -23,26 +23,6 @@ const translations = {
         mojito: "Mojito", smoothies: "Smoothies", icetea: "Ice Tea", hotdrinks: "Hot Drinks", latte: "Latte", sandwiches: "Sandwiches", croissant: "Croissant", cakes: "Cakes", energy: "Energy Drinks", pastries: "Pastries",
         waGreeting: "Hello Churros Land 👋", waTable: "👉 ORDER FROM TABLE", waOrder: "My Order", waTotal: "Total"
     },
-    ku: {
-        dir: "rtl",
-        subSub: "نانەواخانە و کافێ",
-        location: "هەولێر",
-        heroDesc: "کلیک لەسەر بابەتەکان بکە بۆ زیادکردنیان. کاتێک تەواو بوویت، دوگمەی ناردن لە خوارەوە دابگرە بۆ ناردنی داواکارییەکەت ڕاستەوخۆ بۆ کارمەندانمان لە ڕێگەی واتسئەپەوە.",
-        qrTitle: "بۆ داواکردن سکان بکە",
-        qrDesc: "کامێرای مۆبایلەکەت ڕووبەڕووی ئەم کۆدە بکەرەوە بۆ کردنەوەی ڕاستەوخۆی مینیو.",
-        printedBtn: "بینینی مینیۆی چاپکراوی نەریتی",
-        footerThanks: "سوپاس بۆ سەردانەکەتان • نانەواخانە و کافێی چۆرۆس لاند",
-        cartTitle: "داواکاری هەڵبژێردراو",
-        cartTotalLabel: "کۆیی گشتی",
-        clearBtn: "سڕینەوە",
-        submitBtn: "ناردنی داواکاری بۆ کارمەندان",
-        tableLabel: "مێزی",
-        itemsLabel: "بابەت هەڵبژێردراون",
-        itemLabel: "بابەت هەڵبژێردراوە",
-        notePastries: "نرخەکان لەگەڵ ستاف پشتڕاست دەکرێنەوە",
-        mojito: "مۆهیتۆ", smoothies: "سمووزی", icetea: "ئایس تی", hotdrinks: "خواردنەوە گەرمەکان", latte: "لاتێ", sandwiches: "ساندویچ", croissant: "کرۆسان", cakes: "کێک", energy: "خواردنەوە وزەبەخشەکان", pastries: "شیرینی و هەویرکاری",
-        waGreeting: "سڵاو چۆرۆس لاند 👋", waTable: "👉 داواکاری لە مێزی", waOrder: "داواکارییەکەم", waTotal: "کۆیی گشتی"
-    },
     ar: {
         dir: "rtl",
         subSub: "مخبز ومقهى",
@@ -67,7 +47,6 @@ const translations = {
 
 const FRUIT_FLAVORS = {
     en: ["Strawberry", "Blueberry", "Apple", "Mango", "Peach", "Pineapple", "Raspberry", "Kiwi", "Cherry", "Passion Fruit"],
-    ku: ["شلیک", "بلو بێری", "سێو", "مانگۆ", "خۆخ", "ئەنەناس", "ڕاسبێری", "کیوی", "گێلاس", "پاشن فروت"],
     ar: ["فراولة", "توت أزرق", "تفاح", "مانجو", "خوخ", "أناناس", "توت عليق", "كيوي", "كرز", "فاكهة العاطفة"]
 };
 
@@ -87,88 +66,84 @@ const getMenuData = (lang) => {
     return [
         {
             name: translations[lang].mojito, id: "cat-mojito", image: "mojito.jpg",
-            items: [{ name: lang === "en" ? "Classic Mojito" : lang === "ku" ? "مۆهیتۆ کلاسیک" : "موهيتو كلاسيك", price: 6000 }, ...makeFlavors(lang === "en" ? " Mojito" : lang === "ku" ? " مۆهیتۆ" : " موهيتو", 7000)]
+            items: [{ name: lang === "en" ? "Classic Mojito" : "موهيتو كلاسيك", price: 6000 }, ...makeFlavors(lang === "en" ? " Mojito" : " موهيتو", 7000)]
         },
-        { name: translations[lang].smoothies, id: "cat-smoothies", image: "smoothies.jpg", items: makeFlavors(lang === "en" ? " Smoothie" : lang === "ku" ? " سمووزی" : " سموذي", 7000) },
-        { name: translations[lang].icetea, id: "cat-icetea", image: "ice-tea.jpg", items: makeFlavors(lang === "en" ? " Ice Tea" : lang === "ku" ? " ئایس تی" : " شاي مثلج", 7000) },
+        { name: translations[lang].smoothies, id: "cat-smoothies", image: "smoothies.jpg", items: makeFlavors(lang === "en" ? " Smoothie" : " سموذي", 7000) },
+        { name: translations[lang].icetea, id: "cat-icetea", image: "ice-tea.jpg", items: makeFlavors(lang === "en" ? " Ice Tea" : " شاي مثلج", 7000) },
         {
             name: translations[lang].hotdrinks, id: "cat-hotdrinks", image: "hot-drinks.jpg",
             items: [
-                { name: lang === "en" ? "Espresso" : lang === "ku" ? "ئێسپرێسۆ" : "إسبريسو", price: 4000 },
-                { name: lang === "en" ? "Americano" : lang === "ku" ? "ئەمەریکانۆ" : "أمريكانو", price: 6000 },
-                { name: lang === "en" ? "Cappuccino" : lang === "ku" ? "کاپوچینۆ" : "كابوتشينو", price: 7000 },
-                { name: lang === "en" ? "Hot Chocolate" : lang === "ku" ? "شۆکۆلاتەی گەرم" : "شوكولاتة ساخنة", price: 7000 },
-                { name: lang === "en" ? "Tea" : lang === "ku" ? "چای" : "شاي", price: 2000 }
+                { name: lang === "en" ? "Espresso" : "إسبريسو", price: 4000 },
+                { name: lang === "en" ? "Americano" : "أمريكانو", price: 6000 },
+                { name: lang === "en" ? "Cappuccino" : "كابوتشينو", price: 7000 },
+                { name: lang === "en" ? "Hot Chocolate" : "شوكولاتة ساخنة", price: 7000 },
+                { name: lang === "en" ? "Tea" : "شاي", price: 2000 }
             ]
         },
         {
             name: translations[lang].latte, id: "cat-latte", image: "latte.jpg",
             items: ["Classic", "Vanilla", "Caramel", "Spanish", "Rose", "Cinnamon", "Lavender"].map(n => {
                 const mapPrices = { "Classic": 6000, "Vanilla": 7000, "Caramel": 7000, "Spanish": 7000, "Rose": 7000, "Cinnamon": 7000, "Lavender": 7000 };
-                return { name: lang === "en" ? `${n} Latte` : lang === "ku" ? `لاتێ ${langNameKU(n)}` : `لاتيه ${langNameAR(n)}`, price: mapPrices[n] };
+                return { name: lang === "en" ? `${n} Latte` : `لاتيه ${langNameAR(n)}`, price: mapPrices[n] };
             })
         },
         {
             name: translations[lang].sandwiches, id: "cat-sandwiches", image: "sandwiches.jpg",
             items: [
-                { name: lang === "en" ? "Chicken Classic" : lang === "ku" ? "مریشك سانويچ" : "دجاج كلاسيك", price: 6000 },
-                { name: lang === "en" ? "Chicken Caesar" : lang === "ku" ? "مریشک سیزەر" : "دجاج سيزر", price: 6000 },
-                { name: lang === "en" ? "Meat Sandwich" : lang === "ku" ? "ساندویچی گۆشت" : "سندويش لحم", price: 6000 },
-                { name: lang === "en" ? "Hot Dog" : lang === "ku" ? "هۆت دۆگ" : "هوت دوغ", price: 6000 },
-                { name: lang === "en" ? "Salami" : lang === "ku" ? "سەلامی" : "سلامي", price: 6000 }
+                { name: lang === "en" ? "Chicken Classic" : "دجاج كلاسيك", price: 6000 },
+                { name: lang === "en" ? "Chicken Caesar" : "دجاج سيزر", price: 6000 },
+                { name: lang === "en" ? "Meat Sandwich" : "سندويش لحم", price: 6000 },
+                { name: lang === "en" ? "Hot Dog" : "هوت دوغ", price: 6000 },
+                { name: lang === "en" ? "Salami" : "سلامي", price: 6000 }
             ]
         },
         {
             name: translations[lang].croissant, id: "cat-croissant", image: "croissant.jpg",
             items: [
-                { name: lang === "en" ? "Cheese Croissant" : lang === "ku" ? "کرۆسانی پەنیر" : "كرواسون جبنة", price: 5000 },
-                { name: lang === "en" ? "Chocolate Croissant" : lang === "ku" ? "کرۆسانی شوکۆلاتە" : "كرواسون شوكولاتة", price: 5000 },
-                { name: lang === "en" ? "Plain Croissant" : lang === "ku" ? "کرۆسانی سادە" : "كرواسون سادة", price: 5000 },
-                { name: lang === "en" ? "Cube Croissant" : lang === "ku" ? "کرۆسانی چوارگۆشە (Cube)" : "كرواسون مكعب", price: 5000 },
-                { name: lang === "en" ? "Roll Croissant" : lang === "ku" ? "کرۆسانی ڕۆڵ" : "كرواسون رول", price: 5000 },
-                { name: lang === "en" ? "Ribbon Croissant" : lang === "ku" ? "کرۆسانی ڕیبۆن" : "كرواسون ريبون", price: 5000 },
-                { name: lang === "en" ? "Crema with Fruit Croissant" : lang === "ku" ? "کرۆسانی کرێم و میوە" : "كرواسون كريمة وفواكه", price: 5000 }
+                { name: lang === "en" ? "Cheese Croissant" : "كرواسون جبنة", price: 5000 },
+                { name: lang === "en" ? "Chocolate Croissant" : "كرواسون شوكولاتة", price: 5000 },
+                { name: lang === "en" ? "Plain Croissant" : "كرواسون سادة", price: 5000 },
+                { name: lang === "en" ? "Cube Croissant" : "كرواسون مكعب", price: 5000 },
+                { name: lang === "en" ? "Roll Croissant" : "كرواسون رول", price: 5000 },
+                { name: lang === "en" ? "Ribbon Croissant" : "كرواسون ريبون", price: 5000 },
+                { name: lang === "en" ? "Crema with Fruit Croissant" : "كرواسون كريمة وفواكه", price: 5000 }
             ]
         },
         {
             name: translations[lang].cakes, id: "cat-cakes", image: "cakes.jpg",
             items: [
-                { name: lang === "en" ? "Banana Cake" : lang === "ku" ? "کێکی مۆز" : "كيك موز", price: 3000 },
-                { name: lang === "en" ? "Brownie Cube" : lang === "ku" ? "بڕاونی چوارگۆشە" : "مكعب براوني", price: 6000 },
-                { name: lang === "en" ? "Brownie" : lang === "ku" ? "بڕاونی" : "braouni", price: 7000 },
-                { name: lang === "en" ? "Chocolate Mousse" : lang === "ku" ? "موویسی شوکۆلاتە" : "موس الشوكولاتة", price: 6000 },
-                { name: lang === "en" ? "Tiramisu" : lang === "ku" ? "تیرامیسو" : "تيراميسو", price: 5000 },
-                { name: lang === "en" ? "Red Velvet" : lang === "ku" ? "ڕێد ڤێلڤێت" : "ريد فيلفيت", price: 7000 },
-                { name: lang === "en" ? "Lazy Cake" : lang === "ku" ? "لەیزی کێک" : "ليزى كيك", price: 5000 }
+                { name: lang === "en" ? "Banana Cake" : "كيك موز", price: 3000 },
+                { name: lang === "en" ? "Brownie Cube" : "مكعب براوني", price: 6000 },
+                { name: lang === "en" ? "Brownie" : "braouni", price: 7000 },
+                { name: lang === "en" ? "Chocolate Mousse" : "موس الشوكولاتة", price: 6000 },
+                { name: lang === "en" ? "Tiramisu" : "تيراميسو", price: 5000 },
+                { name: lang === "en" ? "Red Velvet" : "ريد فيلفيت", price: 7000 },
+                { name: lang === "en" ? "Lazy Cake" : "ليزى كيك", price: 5000 }
             ]
         },
         {
             name: translations[lang].energy, id: "cat-energy", image: "energy-drinks.jpg",
             items: [
-                { name: lang === "en" ? "Red Bull Classic" : lang === "ku" ? "ڕێد بۆڵ کلاسیک" : "ريد بول كلاسيك", price: 4000 },
-                ...makeFlavors("", 7000, lang === "en" ? "Red Bull " : lang === "ku" ? "ڕێد بۆڵ " : "ريد بول ")
+                { name: lang === "en" ? "Red Bull Classic" : "ريد بول كلاسيك", price: 4000 },
+                ...makeFlavors("", 7000, lang === "en" ? "Red Bull " : "ريد بول ")
             ]
         },
         {
             name: translations[lang].pastries, id: "cat-pastries", note: translations[lang].notePastries,
             items: [
-                { name: lang === "en" ? "Cinnamon Roll" : lang === "ku" ? "سینامۆن ڕۆڵ" : "لفافة القرفة", price: 5000 },
-                { name: lang === "en" ? "Canele" : lang === "ku" ? "کانێلی" : "كانيل", price: 3000 },
-                { name: lang === "en" ? "Bombolini with Fruit" : lang === "ku" ? "بۆمبۆلینی لەگەڵ میوە" : "بومبوليني بالفواكه", price: 5000 },
-                { name: lang === "en" ? "Bombolini" : lang === "ku" ? "بۆمبۆلینی سادە" : "بومبوليني", price: 4000 },
-                { name: lang === "en" ? "Danish with Fruit" : lang === "ku" ? "دانیش لەگەڵ میوە " : "دانش بالفواكه", price: 5000 },
-                { name: lang === "en" ? "Danish" : lang === "ku" ? "دانیش سادە" : "دانش", price: 4000 },
-                { name: lang === "en" ? "Donut" : lang === "ku" ? "دۆنات" : "دونات", price: 3000 },
-                { name: lang === "en" ? "Galette" : lang === "ku" ? "گالێت" : "غاليت", price: 5000 }
+                { name: lang === "en" ? "Cinnamon Roll" : "لفافة القرفة", price: 5000 },
+                { name: lang === "en" ? "Canele" : "كانيل", price: 3000 },
+                { name: lang === "en" ? "Bombolini with Fruit" : "بومبوليني بالفواكه", price: 5000 },
+                { name: lang === "en" ? "Bombolini" : "بومبوليني", price: 4000 },
+                { name: lang === "en" ? "Danish with Fruit" : "دانش بالفواكه", price: 5000 },
+                { name: lang === "en" ? "Danish" : "دانش", price: 4000 },
+                { name: lang === "en" ? "Donut" : "دونات", price: 3000 },
+                { name: lang === "en" ? "Galette" : "غاليت", price: 5000 }
             ]
         }
     ];
 };
 
-function langNameKU(n) {
-    const m = { "Classic": "کلاسیک", "Vanilla": "ڤانیلا", "Caramel": "کارامێل", "Spanish": "سپانیش", "Rose": "گوڵ", "Cinnamon": "دارچینی", "Lavender": "لاڤێندەر" };
-    return m[n] || n;
-}
 function langNameAR(n) {
     const m = { "Classic": "كلاسيك", "Vanilla": "فانيليا", "Caramel": "كاراميل", "Spanish": "سبانيش", "Rose": "ورد", "Cinnamon": "قرفة", "Lavender": "خزامى" };
     return m[n] || n;

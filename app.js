@@ -11,7 +11,7 @@ const translations = {
         qrTitle: "Scan to Order",
         qrDesc: "Point your mobile camera over this design element to automatically launch the interactive portal link directly.",
         printedBtn: "View Traditional Printed Layout Menu",
-        footerThanks: "Thank you and enjoy • Maccannoli Bakery & Café",
+        footerThanks: "Thank you and enjoy • Churros Land Bakery & Café",
         cartTitle: "Selected Order",
         cartTotalLabel: "Total Bill",
         clearBtn: "Clear",
@@ -21,7 +21,7 @@ const translations = {
         itemLabel: "item selected",
         notePastries: "Prices to be confirmed with staff",
         mojito: "Mojito", smoothies: "Smoothies", icetea: "Ice Tea", hotdrinks: "Hot Drinks", latte: "Latte", sandwiches: "Sandwiches", croissant: "Croissant", cakes: "Cakes", energy: "Energy Drinks", pastries: "Pastries",
-        waGreeting: "Hello Maccannoli 👋", waTable: "👉 ORDER FROM TABLE", waOrder: "My Order", waTotal: "Total"
+        waGreeting: "Hello Churros Land 👋", waTable: "👉 ORDER FROM TABLE", waOrder: "My Order", waTotal: "Total"
     },
     ku: {
         dir: "rtl",
@@ -31,7 +31,7 @@ const translations = {
         qrTitle: "بۆ داواکردن سکان بکە",
         qrDesc: "کامێرای مۆبایلەکەت ڕووبەڕووی ئەم کۆدە بکەرەوە بۆ کردنەوەی ڕاستەوخۆی مینیو.",
         printedBtn: "بینینی مینیۆی چاپکراوی نەریتی",
-        footerThanks: "سوپاس بۆ سەردانەکەتان • نانەواخانە و کافێی ماکانۆلی",
+        footerThanks: "سوپاس بۆ سەردانەکەتان • نانەواخانە و کافێی چۆرۆس لاند",
         cartTitle: "داواکاری هەڵبژێردراو",
         cartTotalLabel: "کۆیی گشتی",
         clearBtn: "سڕینەوە",
@@ -41,7 +41,7 @@ const translations = {
         itemLabel: "بابەت هەڵبژێردراوە",
         notePastries: "نرخەکان لەگەڵ ستاف پشتڕاست دەکرێنەوە",
         mojito: "مۆهیتۆ", smoothies: "سمووزی", icetea: "ئایس تی", hotdrinks: "خواردنەوە گەرمەکان", latte: "لاتێ", sandwiches: "ساندویچ", croissant: "کرۆسان", cakes: "کێک", energy: "خواردنەوە وزەبەخشەکان", pastries: "شیرینی و هەویرکاری",
-        waGreeting: "سڵاو ماکانۆلی 👋", waTable: "👉 داواکاری لە مێزی", waOrder: "داواکارییەکەم", waTotal: "کۆیی گشتی"
+        waGreeting: "سڵاو چۆرۆس لاند 👋", waTable: "👉 داواکاری لە مێزی", waOrder: "داواکارییەکەم", waTotal: "کۆیی گشتی"
     },
     ar: {
         dir: "rtl",
@@ -51,7 +51,7 @@ const translations = {
         qrTitle: "امسح الرمز للطلب",
         qrDesc: "وجه كاميرا هاتفك فوق الرمز لفتح قائمة الطعام التفاعلية مباشرة.",
         printedBtn: "عرض القائمة المطبوعة التقليدية",
-        footerThanks: "شكراً لكم واستمتعوا بوقتكم • مخبز ومقهى ماكانولي",
+        footerThanks: "شكراً لكم واستمتعوا بوقتكم • مخبز ومقهى تشوروز لاند",
         cartTitle: "الطلب المحدد",
         cartTotalLabel: "الحساب الإجمالي",
         clearBtn: "مسح",
@@ -61,7 +61,7 @@ const translations = {
         itemLabel: "صنف واحد مختار",
         notePastries: "الأسعار يتم تأكيدها مع الموظفين",
         mojito: "موهيتو", smoothies: "سموذي", icetea: "شاي مثلج", hotdrinks: "مشروبات ساخنة", latte: "لاتيه", sandwiches: "سندويشات", croissant: "كرواسون", cakes: "كيك", energy: "مشروبات طاقة", pastries: "معجنات وحلويات",
-        waGreeting: "مرحباً ماكانولي 👋", waTable: "👉 طلب من طاولة", waOrder: "طلبي", waTotal: "المجموع الكلي"
+        waGreeting: "مرحباً تشوروز لاند 👋", waTable: "👉 طلب من طاولة", waOrder: "طلبي", waTotal: "المجموع الكلي"
     }
 };
 
@@ -271,7 +271,7 @@ function renderMenuGrid(menuData) {
                     </div>
                     <div>
                         <h2 class="text-xl font-black tracking-wide text-white">${category.name}</h2>
-                        <p class="text-zinc-500 text-[11px] font-medium uppercase tracking-wider">Maccannoli Premium</p>
+                        <p class="text-zinc-500 text-[11px] font-medium uppercase tracking-wider">Churros Land Premium</p>
                     </div>
                 </div>`;
         } else {

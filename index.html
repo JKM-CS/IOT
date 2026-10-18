@@ -86,7 +86,7 @@
         body.theme-lavender .theme-header { background-color: rgba(17, 13, 26, 0.9); border-color: #3b2a5c; }
     </style>
 </head>
-<body class="theme-default min-h-screen antialiased pb-44">
+<body class="theme-default min-h-screen antialiased pb-32">
 
     <!-- Language Gate -->
     <div id="language-gate" class="theme-header">
@@ -95,11 +95,10 @@
                 <img src="IMG_6187.png" alt="Churros Land Logo" class="w-full h-full object-cover">
             </div>
             <h2 class="text-lg font-black tracking-widest theme-accent-text mb-1">CHURROS LAND</h2>
-            <p class="opacity-60 text-[11px] leading-normal mb-6">Choose your language / زمانت هەڵبژێرە / اختر لغتك</p>
+            <p class="opacity-60 text-[11px] leading-normal mb-6">Choose your language / اختر لغتك</p>
             
             <div class="flex flex-col gap-2">
                 <button onclick="bootAppEngine('en')" class="w-full theme-card hover:opacity-80 border font-bold py-3 px-4 rounded-xl text-xs active:scale-[0.98]">English</button>
-                <button onclick="bootAppEngine('ku')" class="w-full theme-card hover:opacity-80 border font-bold py-3 px-4 rounded-xl text-xs active:scale-[0.98]">کوردی (Kurdî)</button>
                 <button onclick="bootAppEngine('ar')" class="w-full theme-card hover:opacity-80 border font-bold py-3 px-4 rounded-xl text-xs active:scale-[0.98]">العربية</button>
             </div>
         </div>
@@ -118,7 +117,6 @@
                 <div class="flex items-center gap-3">
                     <select id="lang-switcher" onchange="bootAppEngine(this.value)" class="theme-card border px-2.5 py-1.5 rounded-xl text-xs font-bold outline-none cursor-pointer">
                         <option value="en">EN</option>
-                        <option value="ku">KU</option>
                         <option value="ar">AR</option>
                     </select>
                     <div id="table-badge-el" class="theme-accent-bg font-black text-[11px] px-3 py-1.5 rounded-full hidden">📍 Table --</div>
@@ -146,7 +144,7 @@
         </footer>
     </div>
 
-    <!-- Floating Bottom Cart -->
+    <!-- Floating Bottom Cart Summary (No WhatsApp Checkout) -->
     <div id="cart-bar" class="fixed bottom-4 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-full md:max-w-xl theme-card border backdrop-blur-md p-4 rounded-2xl shadow-2xl hidden flex-col gap-3 z-50">
         <div class="flex justify-between items-center border-b border-zinc-800/40 pb-2">
             <div>
@@ -160,14 +158,9 @@
         </div>
         
         <div class="flex gap-1.5 overflow-x-auto no-scrollbar" id="cart-tags-container"></div>
-        
-        <div>
-            <input type="text" id="order-notes" placeholder="✍️ Special instructions..." class="w-full theme-card border rounded-xl px-3 py-1.5 text-xs outline-none">
-        </div>
 
-        <div class="flex gap-2">
-            <button class="theme-card border opacity-80 font-bold px-4 py-3 rounded-xl text-xs cursor-pointer active:scale-95" onclick="clearCart()" id="txt-clear-btn">Clear</button>
-            <button class="flex-1 theme-accent-bg font-extrabold px-4 py-3 rounded-xl text-xs tracking-wider uppercase cursor-pointer active:scale-95" onclick="submitOrderViaWhatsApp()" id="txt-submit-btn">Submit Order to Waiters</button>
+        <div>
+            <button class="w-full theme-card border opacity-80 font-bold py-2.5 rounded-xl text-xs cursor-pointer active:scale-95" onclick="clearCart()" id="txt-clear-btn">Clear Selection</button>
         </div>
     </div>
 
@@ -199,43 +192,27 @@
         const langPack = {
             en: {
                 dir: "ltr", metaType: "Bakery & Café", metaLoc: "Erbil",
-                desc: "Tap items to build your selection. When finished, press the checkout button below to route your dynamic table request straight to our waiters via WhatsApp.",
+                desc: "Tap items to build your selection. Browse our delicious menu options below.",
                 thanks: "Thank you and enjoy • Churros Land Bakery & Café",
-                cartL: "Selected Order", totalL: "Total Bill", clearL: "Clear", submitL: "Submit Order to Waiters",
+                cartL: "Selected Order", totalL: "Total Bill", clearL: "Clear Selection",
                 tNo: "Table", itemSingular: "item selected", itemPlural: "items selected",
                 soldOutBadge: "SOLD OUT",
-                searchPlaceholder: "🔍 Search menu items...",
-                notesPlaceholder: " Special instructions (e.g. Extra hot, no sugar)...",
-                waG: "Hello Churros Land 👋", waT: "👉 ORDER FROM TABLE", waO: "My Order", waTot: "Total", waNotes: "Notes"
-            },
-            ku: {
-                dir: "rtl", metaType: "نانەواخانە و کافێ", metaLoc: "هەولێر",
-                desc: "کلیک لەسەر بابەتەکان بکە بۆ زیادکردنیان. کاتێک تەواو بوویت، دوگمەی ناردن لە خوارەوە دابگرە بۆ ناردنی داواکارییەکەت ڕاستەوخۆ بۆ کارمەندانمان لە ڕێگەی واتسئەپەوە.",
-                thanks: "سوپاس بۆ سەردانەکەتان • نانەواخانە و کافێی چۆرۆس لاند",
-                cartL: "داواکاری هەڵبژێردراو", totalL: "کۆیی گشتی", clearL: "سڕینەوە", submitL: "ناردنی داواکاری بۆ کارمەندان",
-                tNo: "مێزی", itemSingular: "بابەت هەڵبژێردراوە", itemPlural: "بابەت هەڵبژێردراون",
-                soldOutBadge: "تەواوبوو",
-                searchPlaceholder: "🔍 گەڕان لە مێنیو...",
-                notesPlaceholder: " تێبینیی تایبەت (بۆ نموونە: بێ شەکر، زۆر گەرم)...",
-                waG: "سڵاو چۆرۆس لاند 👋", waT: "👉 داواکاری لە مێزی", waO: "داواکارییەکەم", waTot: "کۆیی گشتی", waNotes: "تێبینییەکان"
+                searchPlaceholder: "🔍 Search menu items..."
             },
             ar: {
                 dir: "rtl", metaType: "مخبز ومقهى", metaLoc: "أربيل",
-                desc: "اضغط على الأصناف لبناء طلبك. عند الانتهاء، اضغط على زر إرسال الطلب في الأسفل لإرسال طلب الطاولة الخاص بك مباشرة إلى طاقمنا عبر الواتساب.",
+                desc: "اضغط على الأصناف لبناء طلبك. تصفح خيارات قائمة الطعام الشهية أدناه.",
                 thanks: "شكراً لكم واستمتعوا بوقتكم • مخبز ومقهى تشوروز لاند",
-                cartL: "الطلب المحدد", totalL: "الحساب الإجمالي", clearL: "مسح", submitL: "إرسال الطلب إلى الطاقم",
+                cartL: "الطلب المحدد", totalL: "الحساب الإجمالي", clearL: "مسح الاختيار",
                 tNo: "طاولة", itemSingular: "صنف واحد مختار", itemPlural: "أصناف مختارة",
                 soldOutBadge: "نفذت الكمية",
-                searchPlaceholder: "🔍 بحث في القائمة...",
-                notesPlaceholder: " ملاحظات خاصة (مثال: بدون سكر، ساخن جداً)...",
-                waG: "مرحباً تشوروز لاند 👋", waT: "👉 طلب من طاولة", waO: "طلبي", waTot: "المجموع الكلي", waNotes: "ملاحظات"
+                searchPlaceholder: "🔍 بحث في القائمة..."
             }
         };
 
         let currentLang = 'en';
         let cart = {}; 
         let flatPricesLookup = {};
-        let activeWhatsAppNumber = "9647508244835";
         let loadedMenuData = [];
         let searchQuery = "";
 
@@ -256,8 +233,7 @@
                 const configSnap = await window.firestoreGetDoc(configDocRef);
                 if (configSnap.exists()) {
                     const data = configSnap.data();
-                    activeWhatsAppNumber = data.whatsapp_phone || activeWhatsAppNumber;
-                    if (data.theme) document.body.className = `theme-${data.theme} min-h-screen antialiased pb-44`;
+                    if (data.theme) document.body.className = `theme-${data.theme} min-h-screen antialiased pb-32`;
                 }
 
                 const querySnapshot = await window.firestoreGetDocs(window.firestoreCollection(window.firebaseDB, "categories"));
@@ -298,13 +274,12 @@
             pillsContainer.innerHTML = "";
 
             loadedMenuData.forEach(cat => {
-                // Check if category has any visible items
                 const visibleItems = (cat.items || []).filter(item => item.hidden !== true);
                 if (visibleItems.length === 0) return;
 
                 const localizedCatName = cat[`name_${lang}`] || cat.name_en;
                 const pill = document.createElement("a");
-                pill.href = `#${cat.id}`;
+                pill.href = `#${cat.docId || cat.id}`;
                 pill.className = "theme-card border opacity-80 text-[11px] font-bold px-4 py-2 rounded-xl whitespace-nowrap active:scale-95";
                 pill.textContent = localizedCatName;
                 pillsContainer.appendChild(pill);
@@ -323,10 +298,8 @@
             document.getElementById("txt-cart-lbl").textContent = pack.cartL;
             document.getElementById("txt-total-lbl").textContent = pack.totalL;
             document.getElementById("txt-clear-btn").textContent = pack.clearL;
-            document.getElementById("txt-submit-btn").textContent = pack.submitL;
 
             document.getElementById("search-bar").placeholder = pack.searchPlaceholder;
-            document.getElementById("order-notes").placeholder = pack.notesPlaceholder;
 
             if (tableNum) {
                 const badge = document.getElementById("table-badge-el");
@@ -350,9 +323,10 @@
 
             data.forEach(cat => {
                 const localizedCatName = cat[`name_${lang}`] || cat.name_en;
+                const catTargetId = cat.docId || cat.id;
                 
                 const sect = document.createElement("div");
-                sect.id = cat.id;
+                sect.id = catTargetId;
                 sect.className = "scroll-mt-custom"; 
 
                 let coverBannerBlock = cat.banner ? `<div class="w-full h-28 md:h-40 rounded-2xl overflow-hidden mb-3 border border-zinc-800"><img src="${cat.banner}" class="w-full h-full object-cover"></div>` : "";
@@ -369,17 +343,15 @@
 
                 if (cat.items && Array.isArray(cat.items)) {
                     cat.items.forEach(item => {
-                        // Skip completely if item is marked hidden
                         if (item.hidden === true) return;
 
                         const localizedItemName = item[`name_${lang}`] || item.name_en;
                         const localizedDesc = item[`desc_${lang}`] || item.desc_en || "";
 
                         const matchEn = (item.name_en || '').toLowerCase().includes(searchQuery);
-                        const matchKu = (item.name_ku || '').toLowerCase().includes(searchQuery);
                         const matchAr = (item.name_ar || '').toLowerCase().includes(searchQuery);
 
-                        if (searchQuery && !matchEn && !matchKu && !matchAr) return;
+                        if (searchQuery && !matchEn && !matchAr) return;
                         
                         displayableCount++;
                         const safeId = btoa(encodeURIComponent(localizedItemName)).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
@@ -475,32 +447,7 @@
 
         function clearCart() {
             cart = {};
-            document.getElementById("order-notes").value = "";
             syncCartUIState();
-        }
-
-        function submitOrderViaWhatsApp() {
-            const pack = langPack[currentLang];
-            let msg = `${pack.waG}\n`;
-            if (tableNum) msg += `${pack.waT}: ${tableNum}\n\n`;
-            else msg += "\n";
-
-            msg += `${pack.waO}:\n`;
-            let total = 0;
-
-            Object.entries(cart).forEach(([name, qty]) => {
-                const price = flatPricesLookup[name] || 0;
-                msg += `• ${qty}x ${name} - ${(price * qty).toLocaleString()} IQD\n`;
-                total += price * qty;
-            });
-
-            msg += `\n${pack.waTot}: ${total.toLocaleString()} IQD`;
-
-            const notesVal = document.getElementById("order-notes").value.trim();
-            if (notesVal) msg += `\n\n📌 ${pack.waNotes}: ${notesVal}`;
-            
-            const targetUrl = `https://wa.me/${activeWhatsAppNumber}?text=${encodeURIComponent(msg)}`;
-            window.open(targetUrl, "_blank", "noopener,noreferrer") || (window.location.href = targetUrl);
         }
     </script>
 </body>

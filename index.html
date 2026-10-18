@@ -144,7 +144,7 @@
         </footer>
     </div>
 
-    <!-- Floating Bottom Cart Summary (No WhatsApp Checkout) -->
+    <!-- Floating Bottom Cart Summary -->
     <div id="cart-bar" class="fixed bottom-4 left-4 right-4 md:left-1/2 md:right-auto md:-translate-x-1/2 md:w-full md:max-w-xl theme-card border backdrop-blur-md p-4 rounded-2xl shadow-2xl hidden flex-col gap-3 z-50">
         <div class="flex justify-between items-center border-b border-zinc-800/40 pb-2">
             <div>
@@ -164,18 +164,19 @@
         </div>
     </div>
 
+    <!-- Firebase SDK Modules (Updated with new config) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyDpMpNyWRP3u6h4N4o2QPpWJ4cbvHtSrvM",
-            authDomain: "maccannoli-83c54.firebaseapp.com",
-            projectId: "maccannoli-83c54",
-            storageBucket: "maccannoli-83c54.firebasestorage.app",
-            messagingSenderId: "199923494866",
-            appId: "1:199923494866:web:69bd2235d45fccce03220b",
-            measurementId: "G-EEMGQ3718G"
+            apiKey: "AIzaSyBGlnGFQpGmiimZJMVMZWBf9bjX0tUSYcQ",
+            authDomain: "churros-land.firebaseapp.com",
+            projectId: "churros-land",
+            storageBucket: "churros-land.firebasestorage.app",
+            messagingSenderId: "733728724262",
+            appId: "1:733728724262:web:7516bdca4a434cce1e9de7",
+            measurementId: "G-RY7TB35T4Q"
         };
 
         const app = initializeApp(firebaseConfig);

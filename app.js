@@ -1,13 +1,10 @@
-// Configuration constants
-const WHATSAPP_NUMBER = "9647511631324";
-
-// Translation Lookups Engine Data
+// Translation Lookups Engine Data (WhatsApp order fully removed)
 const translations = {
     en: {
         dir: "ltr",
         subSub: "Bakery & Café",
         location: "Erbil",
-        heroDesc: "Tap items to build your selection. When finished, press the checkout button below to route your dynamic table request straight to our waiters via WhatsApp.",
+        heroDesc: "Tap items to build your selection. Browse our delicious menu options below.",
         qrTitle: "Scan to Order",
         qrDesc: "Point your mobile camera over this design element to automatically launch the interactive portal link directly.",
         printedBtn: "View Traditional Printed Layout Menu",
@@ -15,19 +12,17 @@ const translations = {
         cartTitle: "Selected Order",
         cartTotalLabel: "Total Bill",
         clearBtn: "Clear",
-        submitBtn: "Submit Order to Waiters",
         tableLabel: "Table",
         itemsLabel: "items selected",
         itemLabel: "item selected",
         notePastries: "Prices to be confirmed with staff",
-        mojito: "Mojito", smoothies: "Smoothies", icetea: "Ice Tea", hotdrinks: "Hot Drinks", latte: "Latte", sandwiches: "Sandwiches", croissant: "Croissant", cakes: "Cakes", energy: "Energy Drinks", pastries: "Pastries",
-        waGreeting: "Hello Churros Land 👋", waTable: "👉 ORDER FROM TABLE", waOrder: "My Order", waTotal: "Total"
+        mojito: "Mojito", smoothies: "Smoothies", icetea: "Ice Tea", hotdrinks: "Hot Drinks", latte: "Latte", sandwiches: "Sandwiches", croissant: "Croissant", cakes: "Cakes", energy: "Energy Drinks", pastries: "Pastries"
     },
     ar: {
         dir: "rtl",
         subSub: "مخبز ومقهى",
         location: "أربيل",
-        heroDesc: "اضغط على الأصناف لبناء طلبك. عند الانتهاء، اضغط على زر إرسال الطلب في الأسفل لإرسال طلب الطاولة الخاص بك مباشرة إلى طاقمنا عبر الواتساب.",
+        heroDesc: "اضغط على الأصناف لبناء طلبك. تصفح خيارات قائمة الطعام الشهية أدناه.",
         qrTitle: "امسح الرمز للطلب",
         qrDesc: "وجه كاميرا هاتفك فوق الرمز لفتح قائمة الطعام التفاعلية مباشرة.",
         printedBtn: "عرض القائمة المطبوعة التقليدية",
@@ -35,13 +30,11 @@ const translations = {
         cartTitle: "الطلب المحدد",
         cartTotalLabel: "الحساب الإجمالي",
         clearBtn: "مسح",
-        submitBtn: "إرسال الطلب إلى الطاقم",
         tableLabel: "طاولة",
         itemsLabel: "أصناف مختارة",
         itemLabel: "صنف واحد مختار",
         notePastries: "الأسعار يتم تأكيدها مع الموظفين",
-        mojito: "موهيتو", smoothies: "سموذي", icetea: "شاي مثلج", hotdrinks: "مشروبات ساخنة", latte: "لاتيه", sandwiches: "سندويشات", croissant: "كرواسون", cakes: "كيك", energy: "مشروبات طاقة", pastries: "معجنات وحلويات",
-        waGreeting: "مرحباً تشوروز لاند 👋", waTable: "👉 طلب من طاولة", waOrder: "طلبي", waTotal: "المجموع الكلي"
+        mojito: "موهيتو", smoothies: "سموذي", icetea: "شاي مثلج", hotdrinks: "مشروبات ساخنة", latte: "لاتيه", sandwiches: "سندويشات", croissant: "كرواسون", cakes: "كيك", energy: "مشروبات طاقة", pastries: "معجنات وحلويات"
     }
 };
 
@@ -151,11 +144,9 @@ function langNameAR(n) {
 
 let itemPriceLookup = {};
 
-// Handle Language Selections & Overwrite explicit CSS display blocks
 window.selectLanguage = function(lang) {
     currentLang = lang;
     
-    // Toggle page displays smoothly
     document.getElementById("language-gate").style.setProperty("display", "none", "important");
     document.getElementById("application-content-wrapper").style.setProperty("display", "block", "important");
     
@@ -166,7 +157,6 @@ window.selectLanguage = function(lang) {
     itemPriceLookup = {};
     menuData.forEach(cat => cat.items.forEach(i => itemPriceLookup[i.name] = i.price));
 
-    // Fill structural string containers
     document.getElementById("txt-sub-sub").textContent = translations[lang].subSub;
     document.getElementById("txt-location").textContent = translations[lang].location;
     document.getElementById("txt-hero-desc").textContent = translations[lang].heroDesc;
@@ -177,7 +167,6 @@ window.selectLanguage = function(lang) {
     document.getElementById("txt-cart-title").textContent = translations[lang].cartTitle;
     document.getElementById("txt-cart-total-label").textContent = translations[lang].cartTotalLabel;
     document.getElementById("txt-clear-btn").textContent = translations[lang].clearBtn;
-    document.getElementById("txt-submit-btn").textContent = translations[lang].submitBtn;
 
     renderCategoryNav(menuData);
     renderMenuGrid(menuData);
@@ -355,34 +344,4 @@ function setupCartListeners() {
         cart = [];
         updateCartUI();
     });
-    document.getElementById("whatsapp-btn").addEventListener("click", sendWhatsAppOrder);
-}
-
-function sendWhatsAppOrder() {
-    if (cart.length === 0 || !currentLang) return;
-
-    const t = translations[currentLang];
-    const counts = {};
-    cart.forEach(name => counts[name] = (counts[name] || 0) + 1);
-
-    let textMessage = `${t.waGreeting}\n`;
-    if (tableNumber) {
-        textMessage += `${t.waTable}: ${tableNumber}\n\n`;
-    } else {
-        textMessage += "\n";
-    }
-    
-    textMessage += `${t.waOrder}:\n`;
-    
-    let totalCost = 0;
-    Object.entries(counts).forEach(([name, qty]) => {
-        const itemCost = itemPriceLookup[name] || 0;
-        textMessage += `• ${qty}x ${name} - ${(qty * itemCost).toLocaleString()} IQD\n`;
-        totalCost += qty * itemCost;
-    });
-
-    textMessage += `\n${t.waTotal}: ${totalCost.toLocaleString()} IQD`;
-
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(textMessage)}`;
-    window.open(url, "_blank", "noopener,noreferrer") || (window.location.href = url);
 }

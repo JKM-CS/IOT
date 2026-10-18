@@ -253,7 +253,7 @@ function renderMenuGrid(menuData) {
                 <div class="group bg-zinc-950/40 hover:bg-zinc-950 border border-zinc-900 hover:border-zinc-800 rounded-2xl p-4 flex justify-between items-center transition-all duration-200">
                     <div class="space-y-1 pr-2">
                         <h3 class="text-sm font-semibold tracking-wide text-zinc-200 group-hover:text-white transition-colors">${item.name}</h3>
-                        <p class="text-yellow-400 font-bold text-xs tracking-wide">${item.price.toLocaleString()} <span class="text-[10px] text-yellow-500/80 font-medium">IQD</span></p>
+                        <p class="text-yellow-400 font-bold text-xs tracking-wide">${item.price.toLocaleString()} <span class="text-[10px] text-yellow-500/80 font-medium">SYP</span></p>
                     </div>
                     <div class="flex items-center gap-2.5 shrink-0" data-item-id="${safeName}">
                         <div class="quantity-controls flex items-center gap-2.5 hidden">
@@ -313,7 +313,7 @@ function updateCartUI() {
         totalCost += itemPriceLookup[name] || 0;
     });
 
-    cartTotal.textContent = `${totalCost.toLocaleString()} IQD`;
+    cartTotal.textContent = `${totalCost.toLocaleString()} SYP`;
 
     document.querySelectorAll('[data-item-id]').forEach(controlBox => {
         const id = controlBox.getAttribute('data-item-id');

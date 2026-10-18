@@ -270,7 +270,7 @@ function renderMenuGrid(menuData) {
         container.appendChild(section);
     });
     if (window.lucide) window.lucide.createIcons();
-}
+};
 
 window.changeQty = (encodedName, adjustment) => {
     const itemName = decodeURIComponent(escape(atob(encodedName)));

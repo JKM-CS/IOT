@@ -3,7 +3,7 @@ const translations = {
     en: {
         dir: "ltr",
         subSub: "Bakery & Café",
-        location: "Erbil",
+        location: "Syria",
         heroDesc: "Tap items to build your selection. Browse our delicious menu options below.",
         qrTitle: "Scan to Order",
         qrDesc: "Point your mobile camera over this design element to automatically launch the interactive portal link directly.",
@@ -21,7 +21,7 @@ const translations = {
     ar: {
         dir: "rtl",
         subSub: "مخبز ومقهى",
-        location: "أربيل",
+        location: "سوريا",
         heroDesc: "اضغط على الأصناف لبناء طلبك. تصفح خيارات قائمة الطعام الشهية أدناه.",
         qrTitle: "امسح الرمز للطلب",
         qrDesc: "وجه كاميرا هاتفك فوق الرمز لفتح قائمة الطعام التفاعلية مباشرة.",
